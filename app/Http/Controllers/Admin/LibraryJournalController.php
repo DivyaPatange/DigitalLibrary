@@ -110,4 +110,31 @@ class LibraryJournalController extends Controller
          $journal = LibraryJournal::findorfail($id);
          return view('auth.journals.editJournal', compact('journal'));
     }
+
+   public function updateJournal(Request $request, $id)
+   {
+      $journal = LibraryJournal::findorfail($id);
+      $request->validate([
+         'author_name' => 'required',
+         'name' => 'required',
+      ]);
+      $journal->registration_no = $request->registration_no;
+      $journal->author_name = $request->author_name;
+      $journal->name = $request->name;
+      $journal->price = $request->price;
+      $journal->pages = $request->pages;
+      $journal->publisher = $request->publisher;
+      $journal->seller = $request->seller;
+      $journal->date = $request->date;
+      $journal->bill_no = $request->bill_no;
+      $journal->update($request->all());
+      return redirect('/admin/journal-list')->with('success', 'Journal Updated Successfully.');
+   }
+
+   public function deleteJournal($id)
+   {
+      $journal = LibraryJournal::findorfail($id);
+      $journal->delete();
+      return redirect('/admin/journal-list')->with('success', 'Journal Deleted Successfully.');
+   }
 }

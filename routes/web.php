@@ -28,6 +28,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::get('/journal-list', 'LibraryJournalController@journalList');
     Route::post('/uploadFile', 'LibraryJournalController@uploadCsvFile')->name('upload.csv.file');
     Route::get('/edit-journal/{id}', 'LibraryJournalController@editJournal');
+    Route::put('/update-journal/{id}', 'LibraryJournalController@updateJournal')->name('journal.update');
+    Route::delete('/delete-journal/{id}', 'LibraryJournalController@deleteJournal')->name('journal.delete');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

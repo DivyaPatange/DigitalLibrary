@@ -65,6 +65,131 @@
     </div>
   </div>
 </div>
+
+ <!-- The Modal -->
+ <div class="modal" id="addJournal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Add Journal</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <form action="{{ url('/admin/uploadFile') }}" enctype="multipart/form-data" method="POST">
+      @csrf
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Registration No.</label>
+                <input type="text" class="form-control form-control-user @error('registration_no') is-invalid @enderror" name="registration_no" id="exampleInputName" placeholder="Registration No." value="{{ old('registration_no') }}">
+                @error('registration_no')
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+              </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group ">
+                  <label>Author Name</label>
+                  <input type="text" class="form-control form-control-user @error('author_name') is-invalid @enderror" name="author_name" id="exampleInputName" placeholder="Author Name" value="{{ old('author_name') }}">
+                  @error('author_name')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group ">
+                  <label>Name</label>
+                  <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" name="name" id="exampleInputName" placeholder="Enter Name" value="{{ old('name') }}">
+                  @error('name')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group ">
+                  <label>Publisher</label>
+                  <input type="text" class="form-control form-control-user @error('publisher') is-invalid @enderror" name="publisher" id="exampleInputName" placeholder="Enter Publisher" value="{{ old('publisher') }}">
+                  @error('publisher')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label>Price</label>
+                  <input type="number" class="form-control form-control-user @error('price') is-invalid @enderror" name="publisher" id="exampleInputName" placeholder="Enter Price" value="{{ old('price') }}">
+                  @error('price')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label>Pages</label>
+                  <input type="number" class="form-control form-control-user @error('pages') is-invalid @enderror" name="pages" id="exampleInputName" placeholder="Enter Pages" value="{{ old('pages') }}">
+                  @error('pages')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label>Bill No.</label>
+                  <input type="text" class="form-control form-control-user @error('bill_no') is-invalid @enderror" name="bill_no" id="exampleInputName" placeholder="Enter Bill No." value="{{ old('bill_no') }}">
+                  @error('bill_no')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group ">
+                  <label>Seller</label>
+                  <input type="text" class="form-control form-control-user @error('seller') is-invalid @enderror" name="seller" id="exampleInputName" placeholder="Enter Seller" value="{{ old('seller') }}">
+                  @error('seller')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group ">
+                  <label>Date</label>
+                  <input type="date" class="form-control form-control-user @error('date') is-invalid @enderror" name="date" id="exampleInputName" placeholder="Enter Date" value="{{ old('date') }}">
+                  @error('date')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-success" name="submit" value="Save">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -111,7 +236,7 @@
                 <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
                   <i class="fas fa-trash"></i>
                 </a>
-                <form action="{{ route('admin.journals.destroy', $j->id) }}" method="post">
+                <form action="{{ route('admin.journal.delete', $j->id) }}" method="post">
                   @method('DELETE')
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
