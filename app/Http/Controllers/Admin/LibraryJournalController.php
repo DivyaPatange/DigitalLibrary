@@ -105,6 +105,26 @@ class LibraryJournalController extends Controller
           return redirect('/admin/journal-list');
     }
 
+   public function addJournal(Request $request)
+   {
+      $request->validate([
+         'author_name' => 'required',
+         'name' => 'required',
+      ]);
+      $journal = new LibraryJournal();
+      $journal->registration_no = $request->registration_no;
+      $journal->author_name = $request->author_name;
+      $journal->name = $request->name;
+      $journal->price = $request->price;
+      $journal->pages = $request->pages;
+      $journal->publisher = $request->publisher;
+      $journal->seller = $request->seller;
+      $journal->date = $request->date;
+      $journal->bill_no = $request->bill_no;
+      $journal->save();
+      return redirect('/admin/journal-list')->with('success', 'Journal added successfully.');
+   }
+
     public function editJournal($id)
     {
          $journal = LibraryJournal::findorfail($id);

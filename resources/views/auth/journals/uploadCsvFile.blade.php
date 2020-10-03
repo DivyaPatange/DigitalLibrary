@@ -75,7 +75,7 @@
         <h4 class="modal-title">Add Journal</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <form action="{{ url('/admin/uploadFile') }}" enctype="multipart/form-data" method="POST">
+      <form action="{{ url('/admin/add-journal') }}" enctype="multipart/form-data" method="POST">
       @csrf
         <!-- Modal body -->
         <div class="modal-body">
