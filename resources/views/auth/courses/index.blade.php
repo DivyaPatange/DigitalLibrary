@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Department')
+@section('title', 'Courses')
 @section('customcss')
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -20,21 +20,30 @@
   </div>
   @endif
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Department</h1>
+  <h1 class="h3 mb-2 text-gray-800">Course</h1>
   <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">
         <div class="card-header">
-          Add Department
+          Add Course
         </div>
         <div class="card-body">
-          <form method="post" action="{{ route('admin.department.store') }}">
+          <form method="post" action="{{ route('admin.courses.store') }}">
           @csrf 
             <div class="form-group ">
-                <label>Department</label>
-              <input type="text" class="form-control form-control-user @error('department') is-invalid @enderror" name="department" id="exampleInputName" placeholder="Enter Department" value="{{ old('department') }}">
-              @error('department')
+                <label>Course Name</label>
+              <input type="text" class="form-control form-control-user @error('course_name') is-invalid @enderror" name="course_name" id="exampleInputName" placeholder="Enter Course Name" value="{{ old('course_name') }}">
+              @error('course_name')
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+              </span>
+              @enderror
+            </div>
+            <div class="form-group ">
+                <label>Course Duration</label>
+              <input type="text" class="form-control form-control-user @error('course_duration') is-invalid @enderror" name="course_duration" id="exampleInputName" placeholder="Enter Course Duration" value="{{ old('course_duration') }}">
+              @error('course_duration')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
               </span>
@@ -51,7 +60,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Department List</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Course List</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -59,30 +68,33 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Department</th>
+              <th>Course Name</th>
+              <th>Course Duration</th>
               <th>Action</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th>Sr. No.</th>
-              <th>Department</th>
+              <th>Course Name</th>
+              <th>Course Duration</th>
               <th>Action</th>
             </tr>
           </tfoot>
           <tbody>
-          @foreach($department as $key => $d)
+          @foreach($courses as $key => $c)
             <tr>
               <td>{{ ++$key }}</td>
-              <td>{{ $d->department }}</td>
+              <td>{{ $c->course_name }}</td>
+              <td>{{ $c->course_duration }}</td>
               <td>
-                <a href="{{ route('admin.department.edit', $d->id) }}" class="btn btn-warning btn-circle">
+                <a href="{{ route('admin.courses.edit', $c->id) }}" class="btn btn-warning btn-circle">
                   <i class="fas fa-edit"></i>
                 </a>
                 <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
                   <i class="fas fa-trash"></i>
                 </a>
-                <form action="{{ route('admin.department.destroy', $d->id) }}" method="post">
+                <form action="{{ route('admin.courses.destroy', $c->id) }}" method="post">
                   @method('DELETE')
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>

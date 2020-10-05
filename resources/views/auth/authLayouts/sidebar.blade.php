@@ -43,6 +43,16 @@
     <i class="fas fa-list"></i>
     <span>Department</span></a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.courses.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Course</span></a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.authors.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Author</span></a>
+</li>
 
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.category.index') }}">
@@ -51,10 +61,21 @@
 </li>
 <!-- Nav Item - Tables -->
 <li class="nav-item">
-  <a class="nav-link" href="{{ route('admin.books.index') }}">
-    <i class="fas fa-fw fa-table"></i>
-    <span>All Books</span></a>
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+    <i class="fas fa-fw fa-folder"></i>
+    <span>Books</span>
+  </a>
+  <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <a class="collapse-item" href="{{ route('admin.authors.index') }}">Author</a>
+      <a class="collapse-item" href="register.html">Seller</a>
+      <a class="collapse-item" href="forgot-password.html">Publisher</a>
+      <a class="collapse-item" href="{{ route('admin.books.index') }}">Upload Pdf</a>
+      <a class="collapse-item" href="blank.html">Add Book</a>
+    </div>
+  </div>
 </li>
+
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
   <i class="fas fa-fw fa-table"></i>

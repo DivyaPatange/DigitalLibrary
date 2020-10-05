@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\Department;
+use App\Admin\Course;
 
-class DepartmentController extends Controller
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $department = Department::all();
-        return view('auth.department.index', compact('department'));
+        $courses = Course::all();
+        return view('auth.courses.index', compact('courses'));
     }
 
     /**
@@ -38,12 +38,14 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'department' => 'required',
+            'course_name' => 'required',
+            'course_duration' => 'required',
         ]);
-        $department = new Department();
-        $department->department = $request->department;
-        $department->save();
-        return redirect('/admin/department')->with('success', 'Department added successfully!');
+        $course = new Course();
+        $course->course_name = $request->course_name;
+        $course->course_duration = $request->course_duration;
+        $course->save();
+        return redirect('/admin/courses')->with('success', 'Course added successfully!');
     }
 
     /**
@@ -65,8 +67,8 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $department = Department::findorfail($id);
-        return view('auth.department.edit', compact('department'));
+        $course = Course::findorfail($id);
+        return view('auth.courses.edit', compact('course'));
     }
 
     /**
@@ -78,22 +80,24 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $department = Department::findorfail($id);
-        $department->department = $request->department;
-        $department->update($request->all());
-        return redirect('/admin/department')->with('success', 'Department updated successfully!');
+        $course = Course::findorfail($id);
+        // dd($course);
+        $course->course_name = $request->course_name;
+        $course->course_duration = $request->course_duration;
+        $course->update($request->all());
+        return redirect('/admin/courses')->with('success', 'Course updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Responses
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $department = Department::findorfail($id);
-        $department->delete();
-        return redirect('/admin/department')->with('success', 'Department deleted successfully!');
+        $course = Course::findorfail($id);
+        $course->delete();
+        return redirect('/admin/courses')->with('success', 'Course deleted successfully!');
     }
 }

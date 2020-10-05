@@ -33,6 +33,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::post('/add-journal', 'LibraryJournalController@addJournal')->name('journal.add');
     Route::resource('/academic-year', 'AcademicYearController');
     Route::resource('/department', 'DepartmentController');
+    Route::resource('/courses', 'CourseController');
+    Route::resource('/authors', 'AuthorController');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

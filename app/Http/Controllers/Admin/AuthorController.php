@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\Department;
+use App\Admin\Author;
 
-class DepartmentController extends Controller
+class AuthorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $department = Department::all();
-        return view('auth.department.index', compact('department'));
+        $authprs = Author::all();
+        return view('auth.authors.index', compact('authors'));
     }
 
     /**
@@ -38,12 +38,12 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'department' => 'required',
+            'author_name' => 'required',
         ]);
-        $department = new Department();
-        $department->department = $request->department;
-        $department->save();
-        return redirect('/admin/department')->with('success', 'Department added successfully!');
+        $author = new Author();
+        $author->author_name = $request->author_name;
+        $author->save();
+        return redirect('/admin/authors')->with('success', 'Author added successfully!');
     }
 
     /**
@@ -65,8 +65,8 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $department = Department::findorfail($id);
-        return view('auth.department.edit', compact('department'));
+        $author = Author::findorfail($id);
+        return view('auth.authors.edit', compact('author'));
     }
 
     /**
@@ -78,22 +78,22 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $department = Department::findorfail($id);
-        $department->department = $request->department;
-        $department->update($request->all());
-        return redirect('/admin/department')->with('success', 'Department updated successfully!');
+        $author = Author::findorfail($id);
+        $author->author_name = $request->author_name;
+        $author->update($request->all());
+        return redirect('/admin/authors')->with('success', 'Author updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Responses
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $department = Department::findorfail($id);
-        $department->delete();
-        return redirect('/admin/department')->with('success', 'Department deleted successfully!');
+        $author = Author::findorfail($id);
+        $author->delete();
+        return redirect('/admin/authors')->with('success', 'Author deleted successfully!');
     }
 }
