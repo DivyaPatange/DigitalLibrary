@@ -32,7 +32,18 @@
   <a class="nav-link" href="{{ route('admin.users.index') }}">
     <i class="fas fa-fw fa-user"></i>
     <span>Users</span></a>
+</li<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.academic-year.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Academic Year</span></a>
 </li>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.department.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Department</span></a>
+</li>
+
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.category.index') }}">
     <i class="fas fa-list"></i>

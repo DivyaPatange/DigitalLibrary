@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Edit Category')
+@section('title', 'Edit Academic Year')
 @section('customcss')
 @endsection
 @section('content')
@@ -18,18 +18,28 @@
     </div>
     @endif
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Edit Category</h1>
+    <h1 class="h3 mb-2 text-gray-800">Edit Academic Year</h1>
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.category.update', $category->id) }}">
+                    <form method="post" action="{{ route('admin.academic-year.update', $academicYear->id) }}">
                     @csrf 
                     @method('PUT')
                         <div class="form-group ">
-                            <input type="text" class="form-control form-control-user @error('category') is-invalid @enderror" name="category" id="exampleInputName" placeholder="Category Name" value="{{ $category->category }}">
-                            @error('category')
+                            <label>From Academic Year</label>
+                            <input type="number" class="form-control form-control-user @error('from_academic_year') is-invalid @enderror" name="from_academic_year" id="exampleInputName" placeholder="From Academic Year" value="{{ $academicYear->from_academic_year }}">
+                            @error('from_academic_year')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group ">
+                            <label>To Academic Year</label>
+                            <input type="number" class="form-control form-control-user @error('to_academic_year') is-invalid @enderror" name="to_academic_year" id="exampleInputName" placeholder="To Academic Year" value="{{ $academicYear->to_academic_year }}">
+                            @error('to_academic_year')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
