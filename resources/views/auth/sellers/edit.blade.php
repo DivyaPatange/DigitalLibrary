@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Edit Category')
+@section('title', 'Edit Seller')
 @section('customcss')
 @endsection
 @section('content')
@@ -18,22 +18,21 @@
     </div>
     @endif
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Edit Category</h1>
+    <h1 class="h3 mb-2 text-gray-800">Edit Seller</h1>
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
             <div class="card-header">
-          Edit Category
+          Edit Seller
         </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.category.update', $category->id) }}">
+                    <form method="post" action="{{ route('admin.sellers.update', $seller->id) }}">
                     @csrf 
                     @method('PUT')
                         <div class="form-group ">
-                        <label>Category Name</label>
-                            <input type="text" class="form-control form-control-user @error('category') is-invalid @enderror" name="category" id="exampleInputName" placeholder="Category Name" value="{{ $category->category }}">
-                            @error('category')
+                            <input type="text" class="form-control form-control-user @error('seller_name') is-invalid @enderror" name="seller_name" id="exampleInputName" placeholder="Seller Name" value="{{ $seller->seller_name }}">
+                            @error('seller_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

@@ -23,6 +23,9 @@
         <div class="col-lg-6">
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
+            <div class="card-header">
+          Edit Academic Year
+        </div>
                 <div class="card-body">
                     <form method="post" action="{{ route('admin.academic-year.update', $academicYear->id) }}">
                     @csrf 

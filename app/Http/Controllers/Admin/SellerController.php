@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\Author;
+use App\Admin\Seller;
 
-class AuthorController extends Controller
+class SellerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = Author::all();
-        return view('auth.authors.index', compact('authors'));
+        $sellers = Seller::all();
+        return view('auth.sellers.index', compact('sellers'));
     }
 
     /**
@@ -38,12 +38,12 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'author_name' => 'required',
+            'seller_name' => 'required'
         ]);
-        $author = new Author();
-        $author->author_name = $request->author_name;
-        $author->save();
-        return redirect('/admin/authors')->with('success', 'Author added successfully!');
+        $seller = new Seller();
+        $seller->seller_name = $request->seller_name;
+        $seller->save();
+        return redirect('/admin/sellers')->with('success', 'Seller added successfully!');
     }
 
     /**
@@ -65,8 +65,8 @@ class AuthorController extends Controller
      */
     public function edit($id)
     {
-        $author = Author::findorfail($id);
-        return view('auth.authors.edit', compact('author'));
+        $seller = Seller::findorfail($id);
+        return view('auth.sellers.edit', compact('seller'));
     }
 
     /**
@@ -78,10 +78,13 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $author = Author::findorfail($id);
-        $author->author_name = $request->author_name;
-        $author->update($request->all());
-        return redirect('/admin/authors')->with('success', 'Author updated successfully!');
+        $seller = Seller::findorfail($id);
+        $request->validate([
+            'seller_name' => 'required',
+        ]);
+        $seller->seller_name = $request->seller_name;
+        $seller->update($request->all());
+        return redirect('/admin/sellers')->with('success', 'Seller Updated Successfully!');
     }
 
     /**
@@ -92,8 +95,8 @@ class AuthorController extends Controller
      */
     public function destroy($id)
     {
-        $author = Author::findorfail($id);
-        $author->delete();
-        return redirect('/admin/authors')->with('success', 'Author deleted successfully!');
+        $seller = Seller::findorfail($id);
+        $seller->delete();
+        return redirect('/admin/sellers')->with('success', 'Seller Deleted Successfully!');
     }
 }

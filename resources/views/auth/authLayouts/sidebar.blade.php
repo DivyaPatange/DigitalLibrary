@@ -48,11 +48,6 @@
     <i class="fas fa-list"></i>
     <span>Course</span></a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="{{ route('admin.authors.index') }}">
-    <i class="fas fa-list"></i>
-    <span>Author</span></a>
-</li>
 
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.category.index') }}">
@@ -68,10 +63,23 @@
   <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <a class="collapse-item" href="{{ route('admin.authors.index') }}">Author</a>
-      <a class="collapse-item" href="register.html">Seller</a>
-      <a class="collapse-item" href="forgot-password.html">Publisher</a>
+      <a class="collapse-item" href="{{ route('admin.sellers.index') }}">Seller</a>
+      <a class="collapse-item" href="{{ route('admin.publications.index') }}">Publication</a>
       <a class="collapse-item" href="{{ route('admin.books.index') }}">Upload Pdf</a>
       <a class="collapse-item" href="blank.html">Add Book</a>
+    </div>
+  </div>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBT" aria-expanded="true" aria-controls="collapsePages">
+    <i class="fas fa-fw fa-folder"></i>
+    <span>B.T. Card</span>
+  </a>
+  <div id="collapseBT" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <a class="collapse-item" href="">Faculty B.T. Card</a>
+      <a class="collapse-item" href="{{ route('admin.student-bt-card.index') }}">Student B.T. Card</a>
     </div>
   </div>
 </li>

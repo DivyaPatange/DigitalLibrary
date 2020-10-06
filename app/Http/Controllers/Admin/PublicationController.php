@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\Author;
+use App\Admin\Publication;
 
-class AuthorController extends Controller
+class PublicationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = Author::all();
-        return view('auth.authors.index', compact('authors'));
+        $publication = Publication::all();
+        return view('auth.publications.index', compact('publication'));
     }
 
     /**
@@ -38,12 +38,12 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'author_name' => 'required',
+            'publication_name' => 'required',
         ]);
-        $author = new Author();
-        $author->author_name = $request->author_name;
-        $author->save();
-        return redirect('/admin/authors')->with('success', 'Author added successfully!');
+        $publication = new Publication();
+        $publication->publication_name = $request->publication_name;
+        $publication->save();
+        return redirect('/admin/publications')->with('success', 'Publication added successfully!');
     }
 
     /**
@@ -65,8 +65,8 @@ class AuthorController extends Controller
      */
     public function edit($id)
     {
-        $author = Author::findorfail($id);
-        return view('auth.authors.edit', compact('author'));
+        $publication = Publication::findorfail($id);
+        return view('auth.publications.edit', compact('publication'));
     }
 
     /**
@@ -78,10 +78,13 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $author = Author::findorfail($id);
-        $author->author_name = $request->author_name;
-        $author->update($request->all());
-        return redirect('/admin/authors')->with('success', 'Author updated successfully!');
+        $request->validate([
+            'publication_name' => 'required',
+        ]);
+        $publication = Publication::findorfail($id);
+        $publication->publication_name = $request->publication_name;
+        $publication->update($request->all());
+        return redirect('/admin/publications')->with('success', 'Publication updated successfully!');
     }
 
     /**
@@ -92,8 +95,8 @@ class AuthorController extends Controller
      */
     public function destroy($id)
     {
-        $author = Author::findorfail($id);
-        $author->delete();
-        return redirect('/admin/authors')->with('success', 'Author deleted successfully!');
+        $publication = Publication::findorfail($id);
+        $publication->delete();
+        return redirect('/admin/publications')->with('success', 'Publication deleted successfully!');
     }
 }

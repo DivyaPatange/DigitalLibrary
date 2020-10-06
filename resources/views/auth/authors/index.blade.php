@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Category')
+@section('title', 'Author')
 @section('customcss')
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -20,21 +20,20 @@
   </div>
   @endif
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Category</h1>
+  <h1 class="h3 mb-2 text-gray-800">Authors</h1>
   <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">
         <div class="card-header">
-          Add Category
+          Add Author
         </div>
         <div class="card-body">
-          <form method="post" action="{{ route('admin.category.store') }}">
+          <form method="post" action="{{ route('admin.authors.store') }}">
           @csrf 
             <div class="form-group ">
-              <label>Category Name</label>
-              <input type="text" class="form-control form-control-user @error('category') is-invalid @enderror" name="category" id="exampleInputName" placeholder="Category Name" value="{{ old('category') }}">
-              @error('category')
+              <input type="text" class="form-control form-control-user @error('author_name') is-invalid @enderror" name="author_name" id="exampleInputName" placeholder="Author Name" value="{{ old('author_name') }}">
+              @error('author_name')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
               </span>
@@ -51,7 +50,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Author List</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -59,30 +58,30 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Category Name</th>
+              <th>Author Name</th>
               <th>Action</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th>Sr. No.</th>
-              <th>Category Name</th>
+              <th>Author Name</th>
               <th>Action</th>
             </tr>
           </tfoot>
           <tbody>
-          @foreach($category as $key => $c)
+          @foreach($authors as $key => $a)
             <tr>
               <td>{{ ++$key }}</td>
-              <td>{{ $c->category }}</td>
+              <td>{{ $a->author_name }}</td>
               <td>
-                <a href="{{ route('admin.category.edit', $c->id) }}" class="btn btn-warning btn-circle">
+                <a href="{{ route('admin.authors.edit', $a->id) }}" class="btn btn-warning btn-circle">
                   <i class="fas fa-edit"></i>
                 </a>
                 <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
                   <i class="fas fa-trash"></i>
                 </a>
-                <form action="{{ route('admin.category.destroy', $c->id) }}" method="post">
+                <form action="{{ route('admin.authors.destroy', $a->id) }}" method="post">
                   @method('DELETE')
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
