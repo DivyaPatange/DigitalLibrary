@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Student BT Card')
+@section('title', 'Faculty BT Card')
 @section('customcss')
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -20,16 +20,16 @@
     </div>
     @endif
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Student BT Card</h1>
+    <h1 class="h3 mb-2 text-gray-800">Faculty BT Card</h1>
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header">
-                    Add Student BT Card
+                    Add Faculty BT Card
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.student-bt-card.store') }}">
+                    <form method="post" action="{{ route('admin.faculty-bt-card.store') }}">
                     @csrf 
                         <div class="row">
                             <div class="col-md-6">
@@ -37,33 +37,6 @@
                                     <label>Name</label>
                                     <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" name="name" id="exampleInputName" placeholder="Enter Name" value="{{ old('name') }}">
                                     @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label>Class</label>
-                                    <input type="text" class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName" placeholder="Enter Class" value="{{ old('class') }}">
-                                    @error('course')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label>Department</label>
-                                    <select class="form-control form-control-user @error('department') is-invalid @enderror" name="department" id="exampleInputName">
-                                        <option value="">- Select Department -</option>
-                                        @foreach($department as $d)
-                                        <option value="{{ $d->id }}">{{ $d->department }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('department')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -102,7 +75,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Student BT Card List</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Faculty BT Card List</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -112,8 +85,6 @@
               <th>Sr. No.</th>
               <th>BT Card No.</th>
               <th>Name</th>
-              <th>Class</th>
-              <th>Department</th>
               <th>Session</th>
               <th>Action</th>
             </tr>
@@ -123,40 +94,32 @@
               <th>Sr. No.</th>
               <th>BT Card No.</th>
               <th>Name</th>
-              <th>Class</th>
-              <th>Department</th>
               <th>Session</th>
               <th>Action</th>
             </tr>
           </tfoot>
           <tbody>
-          @foreach($studentBT as $key => $s)
+          @foreach($facultyBT as $key => $f)
             <tr>
               <td>{{ ++$key }}</td>
-              <td>{{ $s->BT_no }}</td>
-              <td>{{ $s->name }}</td>
-              <td>{{ $s->class }}</td>
+              <td>{{ $f->BT_no }}</td>
+              <td>{{ $f->name }}</td>
               <td>
               <?php
-                $department = DB::table('departments')->where('id', $s->department)->first();
-              ?>
-              @if(isset($department) && !empty($department)) {{ $department->department }} @endif</td>
-              <td>
-              <?php
-                 $session = DB::table('academic_years')->where('id', $s->session)->first();
+                 $session = DB::table('academic_years')->where('id', $f->session)->first();
               ?>
               @if(isset($session) && !empty($session))
               {{ $session->from_academic_year }} - {{ $session->to_academic_year }}
               @endif
               </td>
               <td>
-                <a href="{{ route('admin.student-bt-card.edit', $s->id) }}" class="btn btn-warning btn-circle">
+                <a href="{{ route('admin.faculty-bt-card.edit', $f->id) }}" class="btn btn-warning btn-circle">
                   <i class="fas fa-edit"></i>
                 </a>
                 <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
                   <i class="fas fa-trash"></i>
                 </a>
-                <form action="{{ route('admin.student-bt-card.destroy', $s->id) }}" method="post">
+                <form action="{{ route('admin.faculty-bt-card.destroy', $f->id) }}" method="post">
                   @method('DELETE')
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>

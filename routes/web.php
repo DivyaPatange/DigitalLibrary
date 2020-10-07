@@ -37,8 +37,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/authors', 'AuthorController');
     Route::resource('/sellers', 'SellerController');
     Route::resource('/publications', 'PublicationController');
-    Route::resource('student-bt-card', 'StudentBTCardController');
-    Route::get('/viewStudentCard','StudentBTCardController@viewStudentCard')->name('viewStudentCard');
+    Route::resource('/student-bt-card', 'StudentBTCardController');
+    Route::resource('/faculty-bt-card', 'FacultyBTCardController');
+    Route::resource('/rack-with-wing', 'RackWingController');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

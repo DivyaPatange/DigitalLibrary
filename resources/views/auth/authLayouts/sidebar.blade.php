@@ -48,6 +48,11 @@
     <i class="fas fa-list"></i>
     <span>Course</span></a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.rack-with-wing.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Rack with Wing</span></a>
+</li>
 
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.category.index') }}">
@@ -78,7 +83,7 @@
   </a>
   <div id="collapseBT" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
-      <a class="collapse-item" href="">Faculty B.T. Card</a>
+      <a class="collapse-item" href="{{ route('admin.faculty-bt-card.index') }}">Faculty B.T. Card</a>
       <a class="collapse-item" href="{{ route('admin.student-bt-card.index') }}">Student B.T. Card</a>
     </div>
   </div>
