@@ -71,7 +71,7 @@
       <a class="collapse-item" href="{{ route('admin.sellers.index') }}">Seller</a>
       <a class="collapse-item" href="{{ route('admin.publications.index') }}">Publication</a>
       <a class="collapse-item" href="{{ route('admin.books.index') }}">Upload Pdf</a>
-      <a class="collapse-item" href="blank.html">Add Book</a>
+      <a class="collapse-item" href="{{ route('admin.libraryBook.index') }}">Add Book</a>
     </div>
   </div>
 </li>

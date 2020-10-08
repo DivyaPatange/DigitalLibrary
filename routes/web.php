@@ -40,6 +40,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/student-bt-card', 'StudentBTCardController');
     Route::resource('/faculty-bt-card', 'FacultyBTCardController');
     Route::resource('/rack-with-wing', 'RackWingController');
+    Route::resource('/libraryBook', 'LibraryBookController');
+    Route::post('/uploadBookFile', 'LibraryBookController@uploadCsvFile');
+
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');
