@@ -10,6 +10,7 @@ use App\Admin\Publication;
 use App\Admin\Seller;
 use App\Admin\RackWing;
 use App\Admin\Department;
+use Session;
 
 class LibraryBookController extends Controller
 {
@@ -65,7 +66,6 @@ class LibraryBookController extends Controller
             'medium' => 'required',
         ]);
         $libraryBook = new LibraryBook();
-        $libraryBook->reg_no = $request->reg_no;
         $libraryBook->book_code = $request->book_code;
         $libraryBook->book_no = $request->book_no;
         $libraryBook->author_name = $request->author_name;
@@ -171,10 +171,10 @@ class LibraryBookController extends Controller
          
                    $importData_arr = array();
                    $i = 0;
-         
-                   while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                    // dd(fgetcsv($file, 10000, ","));
+                   while (($filedata = fgetcsv($file, 10000, ",")) !== FALSE) {
                       $num = count($filedata );
-                      
+                    //   dd($num);
                       // Skip first row (Remove below comment if you want to skip the first row)
                       /*if($i == 0){
                          $i++;
@@ -186,15 +186,15 @@ class LibraryBookController extends Controller
                       $i++;
                    }
                    fclose($file);
-         
+                //    dd($importData_arr);
                    // Insert to MySQL database
                    foreach($importData_arr as $importData){
                      //   dd($importData[1]);
                      $insertData = array(
-                        "reg_no"=>$importData[0],
+                        "reg_no" => $importData[0],
                         "book_code"=>$importData[1],
                         "book_no"=>$importData[2],
-                        "author"=>$importData[3],
+                        "author_name"=>$importData[3],
                         "book_name"=>$importData[4],
                         "price"=>$importData[5],
                         "publication"=>$importData[6],

@@ -80,17 +80,6 @@
         <!-- Modal body -->
         <div class="modal-body">
         <div class="row">
-        <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label>Registration No.</label>
-                                    <input type="text" class="form-control form-control-user @error('reg_no') is-invalid @enderror" name="reg_no" id="exampleInputName" placeholder="Enter Registration No." value="{{ old('reg_no') }}">
-                                    @error('reg_no')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Book Code</label>
@@ -303,7 +292,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Remark</label>
                                     <input type="text" class="form-control form-control-user @error('remark') is-invalid @enderror" name="remark" id="exampleInputName" placeholder="Remark" value="{{ old('remark') }}">
@@ -335,28 +324,74 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>Sr. No.</th>
-              <th>Registration No</th>
-              <th>Author Name</th>
-              <th>Name</th>
-              <th>Publisher</th>
+              <th>Reg. No.</th>
+              <th>Book Code</th>
+              <th>Book No.</th>
+              <th>Author</th>
+              <th>Book Name</th>
+              <th>Price</th>
+              <th>Publication</th>
+              <th>No. of Pages</th>
               <th>Seller</th>
-              <th>Action</th>
+              <th>Bill No.</th>
+              <th>Bill Date</th>
+              <th>Rack No.</th>
+              <th>Receipt No.</th>
+              <th>Receipt Date</th>
+              <th>Scheme</th>
+              <th>Status</th>
+              <th>Department</th>
+              <th>Medium</th>
+              <th>Remark</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
-              <th>Sr. No.</th>
-              <th>Registration No</th>
-              <th>Author Name</th>
-              <th>Name</th>
-              <th>Publisher</th>
+            <th>Reg. No.</th>
+              <th>Book Code</th>
+              <th>Book No.</th>
+              <th>Author</th>
+              <th>Book Name</th>
+              <th>Price</th>
+              <th>Publication</th>
+              <th>No. of Pages</th>
               <th>Seller</th>
-              <th>Action</th>
+              <th>Bill No.</th>
+              <th>Bill Date</th>
+              <th>Rack No.</th>
+              <th>Receipt No.</th>
+              <th>Receipt Date</th>
+              <th>Scheme</th>
+              <th>Status</th>
+              <th>Department</th>
+              <th>Medium</th>
+              <th>Remark</th>
             </tr>
           </tfoot>
           <tbody>
-            
+            @foreach($libraryBook as $key => $l)
+            <tr>
+                <td>{{ ++$key }}</td>
+                <td>{{ $l->book_code }}</td>
+                <td>{{ $l->book_no }}</td>
+                <td>{{ $l->author_name }}</td>
+                <td>{{ $l->book_name }}</td>
+                <td>{{ $l->price }}</td>
+                <td>{{ $l->publication }}</td>
+                <td>{{ $l->no_of_pages }}</td>
+                <td>{{ $l->seller }}</td>
+                <td>{{ $l->bill_no }}</td>
+                <td>{{ $l->bill_date }}</td>
+                <td>{{ $l->rack_no }}</td>
+                <td>{{ $l->receipt_no }}</td>
+                <td>{{ $l->receipt_date }}</td>
+                <td>{{ $l->scheme }}</td>
+                <td>{{ $l->status }}</td>
+                <td>{{ $l->department }}</td>
+                <td>{{ $l->medium }}</td>
+                <td>{{ $l->remark }}</td>
+            </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
