@@ -72,7 +72,7 @@
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Add Journal</h4>
+        <h4 class="modal-title">Add Book</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <form action="{{ route('admin.libraryBook.store') }}" enctype="multipart/form-data" method="POST">
@@ -80,6 +80,17 @@
         <!-- Modal body -->
         <div class="modal-body">
         <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <label>Registration No.</label>
+                                    <input type="text" class="form-control form-control-user @error('reg_no') is-invalid @enderror" name="reg_no" id="exampleInputName" placeholder="Enter Registration No." value="{{ old('reg_no') }}">
+                                    @error('reg_no')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Book Code</label>
@@ -257,7 +268,11 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Status</label>
-                                    <input type="text" class="form-control form-control-user @error('status') is-invalid @enderror" name="status" id="exampleInputName" placeholder="Status" value="{{ old('status') }}">
+                                    <select class="form-control form-control-user @error('status') is-invalid @enderror" name="status" id="exampleInputName">
+                                        <option value="">- Select Status -</option>
+                                        <option value="Available">Available</option>
+                                        <option value="Not Available">Not Available</option>
+                                    </select>
                                     @error('status')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -292,7 +307,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group ">
                                     <label>Remark</label>
                                     <input type="text" class="form-control form-control-user @error('remark') is-invalid @enderror" name="remark" id="exampleInputName" placeholder="Remark" value="{{ old('remark') }}">
@@ -317,7 +332,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Journals List</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Book List</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -343,6 +358,7 @@
               <th>Department</th>
               <th>Medium</th>
               <th>Remark</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tfoot>
@@ -366,6 +382,7 @@
               <th>Department</th>
               <th>Medium</th>
               <th>Remark</th>
+              <th>Action</th>
             </tr>
           </tfoot>
           <tbody>
@@ -390,6 +407,18 @@
                 <td>{{ $l->department }}</td>
                 <td>{{ $l->medium }}</td>
                 <td>{{ $l->remark }}</td>
+                <td>
+                <a href="{{ route('admin.libraryBook.edit', $l->id) }}" class="btn btn-warning btn-circle">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
+                  <i class="fas fa-trash"></i>
+                </a>
+                <form action="{{ route('admin.libraryBook.destroy', $l->id) }}" method="post">
+                  @method('DELETE')
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </form>
+                </td>
             </tr>
             @endforeach
           </tbody>

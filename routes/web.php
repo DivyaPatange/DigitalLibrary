@@ -42,6 +42,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/rack-with-wing', 'RackWingController');
     Route::resource('/libraryBook', 'LibraryBookController');
     Route::post('/uploadBookFile', 'LibraryBookController@uploadCsvFile');
+    Route::resource('/computers', 'ComputerController');
 
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');

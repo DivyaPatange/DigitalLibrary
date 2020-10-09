@@ -66,6 +66,7 @@ class LibraryBookController extends Controller
             'medium' => 'required',
         ]);
         $libraryBook = new LibraryBook();
+        $libraryBook->reg_no = $request->reg_no;
         $libraryBook->book_code = $request->book_code;
         $libraryBook->book_no = $request->book_no;
         $libraryBook->author_name = $request->author_name;
@@ -107,7 +108,13 @@ class LibraryBookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $libraryBook = LibraryBook::findorfail($id);
+        $author = Author::all();
+        $publication = Publication::all();
+        $seller = Seller::all();
+        $rackWing = RackWing::all();
+        $department = Department::all();
+        return view('auth.libraryBook.edit', compact('libraryBook', 'author', 'publication', 'seller', 'rackWing', 'department'));
     }
 
     /**
@@ -119,7 +126,46 @@ class LibraryBookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'book_code' => 'required',
+            'book_no' => 'required',
+            'author_name' => 'required',
+            'book_name' => 'required',
+            'price' => 'required',
+            'publication' => 'required',
+            'no_of_pages' => 'required',
+            'seller' => 'required',
+            'bill_no' => 'required',
+            'bill_date' => 'required',
+            'rack_no' => 'required',
+            'receipt_no' => 'required',
+            'receipt_date' => 'required',
+            'department' => 'required',
+            'medium' => 'required',
+        ]);
+        $libraryBook = LibraryBook::findorfail($id);
+        // dd($libraryBook);
+        $libraryBook->reg_no = $request->reg_no;
+        $libraryBook->book_code = $request->book_code;
+        $libraryBook->book_no = $request->book_no;
+        $libraryBook->author_name = $request->author_name;
+        $libraryBook->book_name = $request->book_name;
+        $libraryBook->price = $request->price;
+        $libraryBook->publication = $request->publication;
+        $libraryBook->no_of_pages = $request->no_of_pages;
+        $libraryBook->seller = $request->seller;
+        $libraryBook->bill_no = $request->bill_no;
+        $libraryBook->bill_date = $request->bill_date;
+        $libraryBook->rack_no = $request->rack_no;
+        $libraryBook->receipt_no = $request->receipt_no;
+        $libraryBook->receipt_date = $request->receipt_date;
+        $libraryBook->scheme = $request->scheme;
+        $libraryBook->status = $request->status;
+        $libraryBook->department = $request->department;
+        $libraryBook->medium = $request->medium;
+        $libraryBook->remark = $request->remark;
+        $libraryBook->update($request->all());
+        return redirect('/admin/libraryBook')->with('success', 'Library Book updated successfully!');
     }
 
     /**
@@ -130,7 +176,9 @@ class LibraryBookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $libraryBook = LibraryBook::findorfail($id);
+        $libraryBook->delete();
+        return redirect('/admin/libraryBook')->with('success', 'Library Book deleted successfully! ');
     }
 
     public function uploadCsvFile(Request $request)

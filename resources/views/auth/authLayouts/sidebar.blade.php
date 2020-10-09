@@ -32,11 +32,16 @@
   <a class="nav-link" href="{{ route('admin.users.index') }}">
     <i class="fas fa-fw fa-user"></i>
     <span>Users</span></a>
-</li<li class="nav-item">
+</li>
+<li class="nav-item">
   <a class="nav-link" href="{{ route('admin.academic-year.index') }}">
     <i class="fas fa-list"></i>
     <span>Academic Year</span></a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.rack-with-wing.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Rack with Wing</span></a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.department.index') }}">
@@ -49,16 +54,16 @@
     <span>Course</span></a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="{{ route('admin.rack-with-wing.index') }}">
+  <a class="nav-link" href="{{ route('admin.computers.index') }}">
     <i class="fas fa-list"></i>
-    <span>Rack with Wing</span></a>
+    <span>Computer Registration</span></a>
 </li>
 
-<li class="nav-item">
+<!-- <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.category.index') }}">
     <i class="fas fa-list"></i>
     <span>Category</span></a>
-</li>
+</li> -->
 <!-- Nav Item - Tables -->
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
@@ -67,6 +72,7 @@
   </a>
   <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
+      <a class="collapse-item" href="{{ route('admin.category.index') }}">Category</a>
       <a class="collapse-item" href="{{ route('admin.authors.index') }}">Author</a>
       <a class="collapse-item" href="{{ route('admin.sellers.index') }}">Seller</a>
       <a class="collapse-item" href="{{ route('admin.publications.index') }}">Publication</a>
