@@ -129,12 +129,16 @@ class LibraryAccessionController extends Controller
                        '<td>'.$user->name.'</td>'. 
                        '<td>'.$row->start_time.'</td>';
                        if(!$row->end_time){
-                       $output .='<td><input type="text" class="form-control form-control-user accession-end-time" name="end_time"  placeholder="End Time" ></td>';
+                       $output .='<td><input type="text" class="form-control form-control-user accession-end-time" name="end_time"  placeholder="End Time" ></td>'.  
+                       '<td><a href="#" class="btn btn-warning btn-circle">
+                       <i class="fas fa-edit"></i>
+                     </a></td>';
                         }
                         else{
-                            $output .='<td>'.$row->end_time.'</td>'; 
+                            $output .='<td>'.$row->end_time.'</td>'.  
+                            '<td>Updated</td>'; 
                         }
-                        
+                    
                     }
                 }
                 // end of output
