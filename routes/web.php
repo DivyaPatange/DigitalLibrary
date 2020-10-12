@@ -19,7 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admin, user')->group(function(){
+Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admin')->group(function(){
     Route::resource('/users', 'UserController');
     Route::resource('/category', 'CategoryController');
     Route::resource('/books', 'BooksController');
@@ -43,9 +43,13 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/libraryBook', 'LibraryBookController');
     Route::post('/uploadBookFile', 'LibraryBookController@uploadCsvFile');
     Route::resource('/computers', 'ComputerController');
-
+    Route::resource('bookTransaction', 'BookTransactionController');
+    Route::get('/studentBTCard', 'BookTransactionController@searchStudentBTCard')->name('searchStudentBTCard');
+    Route::get('/searchBookCode', 'BookTransactionController@searchBookCode')->name('searchBookCode');
+    Route::resource('/libraryAccession', 'LibraryAccessionController');
+    Route::get('/searchLibraryAccessionRecord', 'LibraryAccessionController@searchLibraryAccessionRecord')->name('searchLibraryAccessionRecord');
 });
-Route::get('/user/books', 'Admin\BooksController@viewBook')->name('user.books.index');
+Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');
 Route::get('/user/journals', 'Admin\JournalController@viewJournal')->name('user.journals.index');
 Route::get('/journal/{id}', 'Admin\JournalController@showJournal')->name('journal.view');

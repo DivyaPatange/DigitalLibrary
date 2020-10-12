@@ -81,7 +81,18 @@
     </div>
   </div>
 </li>
-
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBookIssue" aria-expanded="true" aria-controls="collapsePages">
+    <i class="fas fa-fw fa-folder"></i>
+    <span>Book Issue</span>
+  </a>
+  <div id="collapseBookIssue" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <a class="collapse-item" href="{{ route('admin.bookTransaction.index') }}">Student Book Issue</a>
+      <a class="collapse-item" href="#">Faculty Book Issue</a>
+    </div>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBT" aria-expanded="true" aria-controls="collapsePages">
     <i class="fas fa-fw fa-folder"></i>
@@ -94,7 +105,11 @@
     </div>
   </div>
 </li>
-
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.libraryAccession.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Library Accession</span></a>
+</li>
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
   <i class="fas fa-fw fa-table"></i>
