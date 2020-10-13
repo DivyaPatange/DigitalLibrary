@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Admin\LibraryAccession;
 use DateTime;
 use App\Admin\StudentBT;
+use App\Admin\AcademicYear;
 
 class LibraryAccessionController extends Controller
 {
@@ -17,7 +18,8 @@ class LibraryAccessionController extends Controller
      */
     public function index()
     {
-        $libraryAccession = LibraryAccession::all();
+        $libraryAccession = LibraryAccession::where('start_time', 'LIKE', date('Y-m-d').'%')->get();
+        // dd($libraryAccession);
         return view('auth.libraryAccession.index', compact('libraryAccession'));
     }
 
@@ -43,12 +45,20 @@ class LibraryAccessionController extends Controller
             'BT_no' => 'required',
             'start_time' => 'required',
         ]);
-        $libraryAccession = new LibraryAccession();
-
-        $libraryAccession->BT_no = $request->BT_no;
-        $libraryAccession->start_time = $request->start_time;
-        $libraryAccession->save();
-        return redirect('/admin/libraryAccession')->with('success', 'Library Accessed');
+        $studentBT = StudentBT::where('BT_no', $request->BT_no)->first();
+        $session = AcademicYear::where('id', $studentBT->session)->first();
+        $date = date('Y/m/d H:i:s');
+        if(($date >= $session->from_academic_year) && ($date <= $session->to_academic_year))
+        {
+            $libraryAccession = new LibraryAccession();
+            $libraryAccession->BT_no = $request->BT_no;
+            $libraryAccession->start_time = $request->start_time;
+            $libraryAccession->save();
+            return redirect('/admin/libraryAccession')->with('success', 'Library Accessed');
+        }
+        else{
+            return redirect('/admin/libraryAccession')->with('danger', 'BT Card is Expired!');
+        }
     }
 
     /**

@@ -46,7 +46,12 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Class</label>
-                                    <input type="text" class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName" placeholder="Enter Class" value="{{ old('class') }}">
+                                    <select class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName">
+                                        <option value="">- Select Course -</option>
+                                        @foreach($course as $c)
+                                        <option value="{{ $c->id }}">{{ $c->course_name }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('class')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -135,7 +140,11 @@
               <td>{{ ++$key }}</td>
               <td>{{ $s->BT_no }}</td>
               <td>{{ $s->name }}</td>
-              <td>{{ $s->class }}</td>
+              <td>
+              <?php
+                $course = DB::table('courses')->where('id', $s->class)->first();
+              ?>
+              @if(isset($course) && !empty($course)){{ $course->course_name }}@endif</td>
               <td>
               <?php
                 $department = DB::table('departments')->where('id', $s->department)->first();

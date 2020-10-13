@@ -73,7 +73,15 @@
       <h6 class="m-0 font-weight-bold text-primary">Library Accession List</h6>
       </div>
       <div class="col-md-6">
-      <input type="date" class="form-control form-control-user @error('accession_date') is-invalid @enderror" name="accession_date" id="accession_date" placeholder="Select Date" value="{{ old('accession_date') }}">
+  <?php   
+  $month = date('m');
+  $day = date('d');
+  $year = date('Y');
+
+  $today = $month . '/' . $day . '/' . $year;
+  // dd($today);
+  ?>
+      <input type="date" value="{{ $today }}" class="form-control form-control-user @error('accession_date') is-invalid @enderror" name="accession_date" id="accession_date" placeholder="Select Date">
     </div>
     </div>
     </div>
@@ -101,6 +109,16 @@
             </tr>
           </tfoot>
           <tbody id="accession_record">
+          @foreach($libraryAccession as $key=> $la)
+          <tr>
+            <th>{{ ++$key }}</th>
+            <th>BT Card No.</th>
+            <th>Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Action</th>
+          </tr>
+          @endforeach
           </tbody>
         </table>
       </div>

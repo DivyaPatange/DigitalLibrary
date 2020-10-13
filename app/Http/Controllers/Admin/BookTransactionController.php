@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Admin\BookTransaction;
 use App\Admin\StudentBT;
 use App\Admin\LibraryBook;
+use App\Admin\AcademicYear;
 
 class BookTransactionController extends Controller
 {
@@ -43,16 +44,24 @@ class BookTransactionController extends Controller
             'BT_no' => 'required',
             'book_code' => 'required',
         ]);
+        $studentBT = StudentBT::where('BT_no', $request->BT_no)->first();
+        $session = AcademicYear::where('id', $studentBT->session)->first();
         $date = date('Y/m/d H:i:s');
-        $increment_date = strtotime("+7 day", strtotime($date));
-        $expected_date = date("Y-m-d", $increment_date);
-        $bookTransaction = new BookTransaction();
-        $bookTransaction->BT_no = $request->BT_no;
-        $bookTransaction->book_code = $request->book_code;
-        $bookTransaction->issue_date = $date;
-        $bookTransaction->expected_return_date = $expected_date;
-        $bookTransaction->save();
-        return redirect('/admin/bookTransaction')->with('success', 'Book Issue Successfully!');
+        if(($date >= $session->from_academic_year) && ($date <= $session->to_academic_year))
+        {
+            $increment_date = strtotime("+7 day", strtotime($date));
+            $expected_date = date("Y-m-d", $increment_date);
+            $bookTransaction = new BookTransaction();
+            $bookTransaction->BT_no = $request->BT_no;
+            $bookTransaction->book_code = $request->book_code;
+            $bookTransaction->issue_date = $date;
+            $bookTransaction->expected_return_date = $expected_date;
+            $bookTransaction->save();
+            return redirect('/admin/bookTransaction')->with('success', 'Book Issue Successfully!');
+        }
+        else{
+            return redirect('/admin/bookTransaction')->with('danger', 'BT Card is Expired!');
+        }
     }
 
     /**
