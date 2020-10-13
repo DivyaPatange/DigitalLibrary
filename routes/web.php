@@ -48,6 +48,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::get('/searchBookCode', 'BookTransactionController@searchBookCode')->name('searchBookCode');
     Route::resource('/libraryAccession', 'LibraryAccessionController');
     Route::get('/searchLibraryAccessionRecord', 'LibraryAccessionController@searchLibraryAccessionRecord')->name('searchLibraryAccessionRecord');
+    Route::post('/updateLibraryAccessionTime', 'LibraryAccessionController@updateLibraryAccessionTime')->name('libraryAccession.updatetime');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

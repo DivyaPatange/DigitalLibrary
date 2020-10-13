@@ -1,20 +1,9 @@
 @extends('auth.authLayouts.main')
 @section('title', 'Library Accession')
 @section('customcss')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="{{ asset('adminAsset/css/bootstrap-datetimepicker.min.css') }}">
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+
 @endsection
 @section('content')
 <!-- Begin Page Content -->
@@ -57,7 +46,7 @@
                                 </div>
                                     <div class="form-group ">
                                         <label>.</label>
-                                        <input type="text" class="form-control form-control-user @error('start_time') is-invalid @enderror" name="start_time" id="start_date" placeholder="Start Time" value="{{ old('start_time') }}">
+                                        <input type="datetime-local" class="form-control form-control-user start_time @error('start_time') is-invalid @enderror" name="start_time" id="start_date" placeholder="Start Time" value="{{ old('start_time') }}">
                                         @error('start_time')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -112,7 +101,6 @@
             </tr>
           </tfoot>
           <tbody id="accession_record">
-          
           </tbody>
         </table>
       </div>
@@ -122,6 +110,51 @@
 <!-- /.container-fluid -->
 @endsection
 @section('customjs')
+<!-- <script src="{{ asset('adminAsset/js/bootstrap-datetimepicker.js') }}"></script> -->
+<!-- <script>
+$(function () {
+  $(".accession_end_time").datetimepicker({
+      format : 'YYYY-MM-DD H:m:s',
+      locale : 'en',
+  });
+});
+</script>
+<script>
+$(function () {
+  $('.start_time').datetimepicker({
+      format : 'YYYY-MM-DD H:m:s',
+      locale : 'en',
+  });
+});
+</script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+</script>
+<script>
+$("#accession_record").on("click",".submit",function(){
+    let deleteButton = $(this);
+    let id = deleteButton.data('id');
+    let end_time = $(".end_time").val();
+    // alert(end_time);
+		$.ajax({
+			url: "{{ url('admin/updateLibraryAccessionTime') }}",
+			method:"POST",
+			data:{id:id, end_time:end_time},
+			success:function(data)
+			{
+        setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+
+			}
+		});
+});
+</script>
 <!-- Page level plugins -->
 <script src="{{ asset('adminAsset/vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -133,24 +166,10 @@ $(document).ready(function() {
         $('#dataTable').DataTable();
     } );
 </script>
-<script src="{{ asset('adminAsset/js/bootstrap-datetimepicker.js') }}"></script>
-<script>
-$(function () {
-  $(".accession-end-time").datetimepicker();
-});
-</script>
-<script>
-$(function () {
-  $('#start_date').datetimepicker({
-      format : 'YYYY-MM-DD H:m:s',
-      locale : 'en',
-  });
-});
+
   
 
-</script>
 
-<!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
 
   <script>
   $(document).ready(function () {

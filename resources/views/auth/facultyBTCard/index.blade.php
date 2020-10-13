@@ -49,7 +49,7 @@
                                     <select class="form-control form-control-user @error('session') is-invalid @enderror" name="session" id="exampleInputName">
                                         <option value="">- Select Session -</option>
                                         @foreach($academicYear as $a)
-                                        <option value="{{ $a->id }}">{{ $a->from_academic_year }} - {{ $a->to_academic_year }}</option>
+                                        <option value="{{ $a->id }}">({{ $a->from_academic_year }}) - ({{ $a->to_academic_year }})</option>
                                         @endforeach
                                     </select>
                                     @error('session')
@@ -109,7 +109,7 @@
                  $session = DB::table('academic_years')->where('id', $f->session)->first();
               ?>
               @if(isset($session) && !empty($session))
-              {{ $session->from_academic_year }} - {{ $session->to_academic_year }}
+              ({{ $session->from_academic_year }}) - ({{ $session->to_academic_year }})
               @endif
               </td>
               <td>

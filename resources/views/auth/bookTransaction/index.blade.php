@@ -57,7 +57,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <h3 id="student_name"></h3>
+                      <label></label>
+                        <h5 id="student_name"></h5>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -73,7 +74,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <h4 id="book_name"></h4>
+                        <label></label>
+                        <h5 id="book_name"></h5>
                     </div>
                 </div>
             </div>
@@ -101,6 +103,7 @@
               <th>Sr. No.</th>
               <th>BT Card No.</th>
               <th>Book Code</th>
+              <th>Book Name</th>
               <th>Issue Date</th>
               <th>Expected Return Date</th>
               <th>Actual Return Date</th>
@@ -113,6 +116,7 @@
             <th>Sr. No.</th>
               <th>BT Card No.</th>
               <th>Book Code</th>
+              <th>Book Name</th>
               <th>Issue Date</th>
               <th>Expected Return Date</th>
               <th>Actual Return Date</th>
@@ -124,11 +128,16 @@
             @foreach($bookTransaction as $key => $l)
             <tr>
                 <td>{{ ++$key }}</td>
+                <td>{{ $l->BT_no }}</td>
                 <td>{{ $l->book_code }}</td>
-                <td>{{ $l->book_no }}</td>
-                <td>{{ $l->author_name }}</td>
-                <td>{{ $l->book_name }}</td>
-                <td>{{ $l->price }}</td>
+                <td>
+                <?php
+                  $book_name = DB::table('library_books')->where('book_no', $l->book_code)->first();
+                ?>
+                @if(!empty($book_name)){{ $book_name->book_name }}@endif</td>
+                <td>{{ $l->issue_date }}</td>
+                <td>{{ $l->expected_return_date }}</td>
+                <td>{{ $l->actual_return_date }}</td>
                 <td>{{ $l->publication }}</td>
                 <td>
                 <a href="#" class="btn btn-warning btn-circle">

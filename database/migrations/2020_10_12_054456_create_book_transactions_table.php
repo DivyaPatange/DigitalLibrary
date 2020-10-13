@@ -21,6 +21,7 @@ class CreateBookTransactionsTable extends Migration
             $table->date('expected_return_date')->nullable();
             $table->date('actual_return_date')->nullable();
             $table->string('penalty')->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

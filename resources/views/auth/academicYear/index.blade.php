@@ -33,7 +33,7 @@
           @csrf 
             <div class="form-group ">
                 <label>From Academic Year</label>
-              <input type="number" class="form-control form-control-user @error('from_academic_year') is-invalid @enderror" name="from_academic_year" id="exampleInputName" placeholder="From Academic Year" value="{{ old('from_academic_year') }}">
+              <input type="date" class="form-control form-control-user @error('from_academic_year') is-invalid @enderror" name="from_academic_year" id="exampleInputName" placeholder="From Academic Year" value="{{ old('from_academic_year') }}">
               @error('from_academic_year')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group ">
                 <label>To Academic Year</label>
-              <input type="number" class="form-control form-control-user @error('to_academic_year') is-invalid @enderror" name="to_academic_year" id="exampleInputName" placeholder="To Academic Year" value="{{ old('to_academic_year') }}">
+              <input type="date" class="form-control form-control-user @error('to_academic_year') is-invalid @enderror" name="to_academic_year" id="exampleInputName" placeholder="To Academic Year" value="{{ old('to_academic_year') }}">
               @error('to_academic_year')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -68,16 +68,16 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>From Academic Year</th>
-              <th>To Academic Year</th>
+              <th>From Academic Year(yyyy-mm-dd)</th>
+              <th>To Academic Year(yyyy-mm-dd)</th>
               <th>Action</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th>Sr. No.</th>
-              <th>From Academic Year</th>
-              <th>To Academic Year</th>
+              <th>From Academic Year(yyyy-mm-dd)</th>
+              <th>To Academic Year(yyyy-mm-dd)</th>
               <th>Action</th>
             </tr>
           </tfoot>
@@ -120,5 +120,12 @@
 $(document).ready(function() {
         $('#dataTable').DataTable();
     } );
+</script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<!-- <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> -->
+<script>
+$('.form-control').datepicker({
+    format: 'yyyy-mm-dd'
+ });
 </script>
 @endsection

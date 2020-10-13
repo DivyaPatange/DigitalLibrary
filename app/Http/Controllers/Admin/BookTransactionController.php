@@ -39,7 +39,20 @@ class BookTransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'BT_no' => 'required',
+            'book_code' => 'required',
+        ]);
+        $date = date('Y/m/d H:i:s');
+        $increment_date = strtotime("+7 day", strtotime($date));
+        $expected_date = date("Y-m-d", $increment_date);
+        $bookTransaction = new BookTransaction();
+        $bookTransaction->BT_no = $request->BT_no;
+        $bookTransaction->book_code = $request->book_code;
+        $bookTransaction->issue_date = $date;
+        $bookTransaction->expected_return_date = $expected_date;
+        $bookTransaction->save();
+        return redirect('/admin/bookTransaction')->with('success', 'Book Issue Successfully!');
     }
 
     /**
@@ -134,7 +147,7 @@ class BookTransactionController extends Controller
     {
         if($request->ajax()) {
             // select country name from database
-            $data = LibraryBook::where('book_code', 'LIKE', $request->book_code.'%')
+            $data = LibraryBook::where('book_no', 'LIKE', $request->book_code.'%')
                 ->get();
                 
         
@@ -151,7 +164,7 @@ class BookTransactionController extends Controller
                 // loop through the result array
                 foreach ($data as $row){
                     // dd($request->user_referral_info == $row->referral_code);
-                    if($request->book_code == $row->book_code){
+                    if($request->book_code == $row->book_no){
                     // concatenate output to the array
                     // $parentName = User::where('id', $row->parent_id)->first();
 

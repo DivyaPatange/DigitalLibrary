@@ -50,7 +50,7 @@
                                     <select class="form-control form-control-user @error('session') is-invalid @enderror" name="session" id="exampleInputName">
                                         <option value="">- Select Session -</option>
                                         @foreach($academicYear as $a)
-                                        <option value="{{ $a->id }}" {{ ($a->id == $facultyBT->session) ? 'selected=selected' : '' }}>{{ $a->from_academic_year }} - {{ $a->to_academic_year }}</option>
+                                        <option value="{{ $a->id }}" {{ ($a->id == $facultyBT->session) ? 'selected=selected' : '' }}>({{ $a->from_academic_year }}) - ({{ $a->to_academic_year }})</option>
                                         @endforeach
                                     </select>
                                     @error('session')

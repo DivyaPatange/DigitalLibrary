@@ -32,7 +32,7 @@
                     @method('PUT')
                         <div class="form-group ">
                             <label>From Academic Year</label>
-                            <input type="number" class="form-control form-control-user @error('from_academic_year') is-invalid @enderror" name="from_academic_year" id="exampleInputName" placeholder="From Academic Year" value="{{ $academicYear->from_academic_year }}">
+                            <input type="date" class="form-control form-control-user @error('from_academic_year') is-invalid @enderror" name="from_academic_year" id="exampleInputName" placeholder="From Academic Year" value="{{ $academicYear->from_academic_year }}">
                             @error('from_academic_year')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group ">
                             <label>To Academic Year</label>
-                            <input type="number" class="form-control form-control-user @error('to_academic_year') is-invalid @enderror" name="to_academic_year" id="exampleInputName" placeholder="To Academic Year" value="{{ $academicYear->to_academic_year }}">
+                            <input type="date" class="form-control form-control-user @error('to_academic_year') is-invalid @enderror" name="to_academic_year" id="exampleInputName" placeholder="To Academic Year" value="{{ $academicYear->to_academic_year }}">
                             @error('to_academic_year')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -60,4 +60,11 @@
 <!-- /.container-fluid -->
 @endsection
 @section('customjs')
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<!-- <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> -->
+<script>
+$('.form-control').datepicker({
+    format: 'yyyy-mm-dd'
+ });
+</script>
 @endsection

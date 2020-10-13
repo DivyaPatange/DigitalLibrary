@@ -47,7 +47,7 @@
                                 <div class="form-group ">
                                     <label>Class</label>
                                     <input type="text" class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName" placeholder="Enter Class" value="{{ old('class') }}">
-                                    @error('course')
+                                    @error('class')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -76,7 +76,7 @@
                                     <select class="form-control form-control-user @error('session') is-invalid @enderror" name="session" id="exampleInputName">
                                         <option value="">- Select Session -</option>
                                         @foreach($academicYear as $a)
-                                        <option value="{{ $a->id }}">{{ $a->from_academic_year }} - {{ $a->to_academic_year }}</option>
+                                        <option value="{{ $a->id }}">({{ $a->from_academic_year }}) - ({{ $a->to_academic_year }})</option>
                                         @endforeach
                                     </select>
                                     @error('session')
@@ -146,7 +146,7 @@
                  $session = DB::table('academic_years')->where('id', $s->session)->first();
               ?>
               @if(isset($session) && !empty($session))
-              {{ $session->from_academic_year }} - {{ $session->to_academic_year }}
+              ({{ $session->from_academic_year }}) - ({{ $session->to_academic_year }})
               @endif
               </td>
               <td>

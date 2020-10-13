@@ -129,14 +129,14 @@ class LibraryAccessionController extends Controller
                        '<td>'.$user->name.'</td>'. 
                        '<td>'.$row->start_time.'</td>';
                        if(!$row->end_time){
-                       $output .='<td><input type="text" class="form-control form-control-user accession-end-time" name="end_time"  placeholder="End Time" ></td>'.  
-                       '<td><a href="#" class="btn btn-warning btn-circle">
+                       $output .='<td class="endtime_row"><input type="datetime-local" class="form-control form-control-user end_time" name="end_time" placeholder="End Time">'.  
+                       '<td><button class="btn btn-warning btn-circle submit" data-id="'.$row->id.'" >
                        <i class="fas fa-edit"></i>
-                     </a></td>';
+                     </button></td></tr>';
                         }
                         else{
                             $output .='<td>'.$row->end_time.'</td>'.  
-                            '<td>Updated</td>'; 
+                            '<td>Updated</td></tr>'; 
                         }
                     
                     }
@@ -151,5 +151,12 @@ class LibraryAccessionController extends Controller
             // return output result array
             return $output;
         }
+    }
+
+    public function updateLibraryAccessionTime(Request $request)
+    {
+        $libraryAccession = LibraryAccession::where('id', $request->id)->first();
+        $libraryAccession->end_time  = $request->end_time;
+        $libraryAccession->update($request->all());
     }
 }
