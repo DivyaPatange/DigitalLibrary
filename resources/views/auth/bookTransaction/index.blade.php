@@ -25,7 +25,7 @@
     <div class="col-lg-12">
       <!-- Basic Card Example -->
     <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary mt-3 mb-3">
-        Issue Book
+        Add BT Card
     </button>
     </div>
   </div>
@@ -36,7 +36,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">New Book Issue</h4>
+        <h4 class="modal-title">Add BT Card</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
     <form action="" enctype="multipart/form-data" method="POST">
@@ -61,23 +61,6 @@
                         <h5 id="student_name"></h5>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Book Code</label>
-                      <input type="text" class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" >
-                    </div>
-                    @error('book_code')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label></label>
-                        <h5 id="book_name"></h5>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- Modal footer -->
@@ -93,7 +76,22 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Book List</h6>
+    <div class="row">
+        <div class="col-md-6">
+          <h6 class="m-0 font-weight-bold text-primary">Book Issue List</h6>
+        </div>
+        <div class="col-md-6">
+          <?php   
+          $month = date('m');
+          $day = date('d');
+          $year = date('Y');
+
+          $today = $year . '-' . $month . '-' . $day;
+          // dd($today);
+          ?>
+          <input type="date" class="form-control form-control-user @error('book_issue') is-invalid @enderror" name="book_issue" id="book_issue" placeholder="Select Date">
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -102,26 +100,13 @@
             <tr>
               <th>Sr. No.</th>
               <th>BT Card No.</th>
-              <th>Book Code</th>
-              <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
-              <th>Actual Return Date</th>
-              <th>Action</th>
-              <th>Renew</th>
-            </tr>
+              <th>Issue Book</th>
           </thead>
           <tfoot>
             <tr>
             <th>Sr. No.</th>
-              <th>BT Card No.</th>
-              <th>Book Code</th>
-              <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
-              <th>Actual Return Date</th>
-              <th>Action</th>
-              <th>Renew</th>
+            <th>BT Card No.</th>
+            <th>Issue Book</th>
             </tr>
           </tfoot>
           <tbody>
@@ -129,19 +114,9 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $l->BT_no }}</td>
-                <td>{{ $l->book_code }}</td>
                 <td>
-                <?php
-                  $book_name = DB::table('library_books')->where('book_no', $l->book_code)->first();
-                ?>
-                @if(!empty($book_name)){{ $book_name->book_name }}@endif</td>
-                <td>{{ $l->issue_date }}</td>
-                <td>{{ $l->expected_return_date }}</td>
-                <td>{{ $l->actual_return_date }}</td>
-                <td>{{ $l->publication }}</td>
-                <td>
-                <a href="#" class="btn btn-warning btn-circle">
-                  <i class="fas fa-edit"></i>
+                <a href="{{ route('admin.studentBookIssueForm', $l->id) }}" class="btn btn-info btn-circle">
+                  <i class="fas fa-eye"></i>
                 </a>
                 </td>
             </tr>
@@ -190,29 +165,6 @@ $(document).ready(function () {
     });
 })
 </script>
-<script>
-$(document).ready(function () {
-    // keyup function looks at the keys typed on the search box
-    $('#book_code').on('keyup',function() {
-        // the text typed in the input field is assigned to a variable 
-        var query = $(this).val();
-        // call to an ajax function
-        $.ajax({
-            // assign a controller function to perform search action - route name is search
-            url:"{{ route('admin.searchBookCode') }}",
-            // since we are getting data methos is assigned as GET
-            type:"GET",
-            // data are sent the server
-            data:{'book_code':query},
-            // if search is succcessfully done, this callback function is called
-            success:function (data) {
-                // print the search results in the div called country_list(id)
-                $('#book_name').html(data);
-            }
-        })
-        // end of ajax call
-    });
-})
-</script>
+
 
 @endsection

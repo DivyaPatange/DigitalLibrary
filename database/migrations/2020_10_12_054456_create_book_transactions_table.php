@@ -16,12 +16,6 @@ class CreateBookTransactionsTable extends Migration
         Schema::create('book_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('BT_no');
-            $table->string('book_code');
-            $table->date('issue_date');
-            $table->date('expected_return_date')->nullable();
-            $table->date('actual_return_date')->nullable();
-            $table->string('penalty')->nullable();
-            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

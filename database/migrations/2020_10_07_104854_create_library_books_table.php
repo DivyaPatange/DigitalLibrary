@@ -34,6 +34,7 @@ class CreateLibraryBooksTable extends Migration
             $table->string('department');
             $table->string('medium');
             $table->string('remark');
+            $table->boolean('book_status')->default(1);
             $table->timestamps();
         });
     }

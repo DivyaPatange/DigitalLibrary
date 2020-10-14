@@ -68,22 +68,22 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-    <div class="row">
+      <div class="row">
         <div class="col-md-6">
-      <h6 class="m-0 font-weight-bold text-primary">Library Accession List</h6>
-      </div>
-      <div class="col-md-6">
-  <?php   
-  $month = date('m');
-  $day = date('d');
-  $year = date('Y');
+          <h6 class="m-0 font-weight-bold text-primary">Library Accession List</h6>
+        </div>
+        <div class="col-md-6">
+          <?php   
+          $month = date('m');
+          $day = date('d');
+          $year = date('Y');
 
-  $today = $month . '/' . $day . '/' . $year;
-  // dd($today);
-  ?>
-      <input type="date" value="{{ $today }}" class="form-control form-control-user @error('accession_date') is-invalid @enderror" name="accession_date" id="accession_date" placeholder="Select Date">
-    </div>
-    </div>
+          $today = $year . '-' . $month . '-' . $day;
+          // dd($today);
+          ?>
+          <input type="date" value="{{ $today }}" class="form-control form-control-user @error('accession_date') is-invalid @enderror" name="accession_date" id="accession_date" placeholder="Select Date">
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -109,16 +109,7 @@
             </tr>
           </tfoot>
           <tbody id="accession_record">
-          @foreach($libraryAccession as $key=> $la)
-          <tr>
-            <th>{{ ++$key }}</th>
-            <th>BT Card No.</th>
-            <th>Name</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Action</th>
-          </tr>
-          @endforeach
+          
           </tbody>
         </table>
       </div>
@@ -184,12 +175,27 @@ $(document).ready(function() {
         $('#dataTable').DataTable();
     } );
 </script>
-
-  
-
-
-
-  <script>
+<script type="text/javascript">
+function loadContent() {
+  var query = document.getElementById("accession_date").value;
+        // alert(query);
+        $.ajax({
+            // assign a controller function to perform search action - route name is search
+            url:"{{ route('admin.searchLibraryAccessionRecord') }}",
+            // since we are getting data methos is assigned as GET
+            type:"GET",
+            // data are sent the server
+            data:{'accession_date':query},
+            // if search is succcessfully done, this callback function is called
+            success:function (data) {
+                // print the search results in the div called country_list(id)
+                $('#accession_record').html(data);
+            }
+        })
+}
+window.onload = loadContent;
+</script>
+<script>
   $(document).ready(function () {
     // keyup function looks at the keys typed on the search box
     $('#accession_date').on('change',function() {

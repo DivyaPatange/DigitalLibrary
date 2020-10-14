@@ -18,9 +18,8 @@ class LibraryAccessionController extends Controller
      */
     public function index()
     {
-        $libraryAccession = LibraryAccession::where('start_time', 'LIKE', date('Y-m-d').'%')->get();
         // dd($libraryAccession);
-        return view('auth.libraryAccession.index', compact('libraryAccession'));
+        return view('auth.libraryAccession.index');
     }
 
     /**

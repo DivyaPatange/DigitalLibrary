@@ -8,6 +8,8 @@ use App\Admin\BookTransaction;
 use App\Admin\StudentBT;
 use App\Admin\LibraryBook;
 use App\Admin\AcademicYear;
+use App\Admin\StudentBookIssue;
+use Redirect;
 
 class BookTransactionController extends Controller
 {
@@ -42,22 +44,27 @@ class BookTransactionController extends Controller
     {
         $request->validate([
             'BT_no' => 'required',
-            'book_code' => 'required',
         ]);
         $studentBT = StudentBT::where('BT_no', $request->BT_no)->first();
         $session = AcademicYear::where('id', $studentBT->session)->first();
         $date = date('Y/m/d H:i:s');
         if(($date >= $session->from_academic_year) && ($date <= $session->to_academic_year))
         {
-            $increment_date = strtotime("+7 day", strtotime($date));
-            $expected_date = date("Y-m-d", $increment_date);
+            $bookTransaction = BookTransaction::where('BT_no', $request->BT_no)->first();
+            if(empty($bookTransaction)){
+            // $increment_date = strtotime("+7 day", strtotime($date));
+            // $expected_date = date("Y-m-d", $increment_date);
             $bookTransaction = new BookTransaction();
             $bookTransaction->BT_no = $request->BT_no;
-            $bookTransaction->book_code = $request->book_code;
-            $bookTransaction->issue_date = $date;
-            $bookTransaction->expected_return_date = $expected_date;
+            // $bookTransaction->book_code = $request->book_code;
+            // $bookTransaction->issue_date = $date;
+            // $bookTransaction->expected_return_date = $expected_date;/
             $bookTransaction->save();
             return redirect('/admin/bookTransaction')->with('success', 'Book Issue Successfully!');
+            }
+            else{
+                return redirect('/admin/bookTransaction')->with('danger', 'BT Card is already registered!');
+            }
         }
         else{
             return redirect('/admin/bookTransaction')->with('danger', 'BT Card is Expired!');
@@ -193,5 +200,53 @@ class BookTransactionController extends Controller
             // return output result array
             return $output;
         }
+    }
+
+    public function studentBookIssueForm($id)
+    {
+        $BT_no = BookTransaction::findorfail($id);
+        $issueBook = StudentBookIssue::where('bookTransaction_id', $id)->get();
+        // dd($issueBook);
+        return view('auth.bookTransaction.studentBookIssueForm', compact('BT_no', 'issueBook'));
+    }
+
+    public function studentBookIssueFormSubmit(Request $request)
+    {
+        $request->validate([
+            'book_code' => 'required',
+        ]);
+        $books = LibraryBook::all();
+        foreach($books as $b)
+        {
+            $checkBookAvailability = LibraryBook::where('book_no', $request->book_code)->first();
+            if($checkBookAvailability->book_status == 1)
+            {
+                $studentBT = StudentBT::where('BT_no', $request->BT_no)->first();
+                $session = AcademicYear::where('id', $studentBT->session)->first();
+                $date = date('Y/m/d H:i:s');
+                if(($date >= $session->from_academic_year) && ($date <= $session->to_academic_year))
+                {
+                    $increment_date = strtotime("+7 day", strtotime($date));
+                    $expected_date = date("Y-m-d", $increment_date);
+                    // $bookTransaction->book_code = $request->book_code;
+                    $issueBook = new StudentBookIssue();
+                    $issueBook->bookTransaction_id = $request->BT_id;
+                    $issueBook->book_no = $request->book_code;
+                    $issueBook->issue_date = $date;
+                    $issueBook->expected_return_date = $expected_date;
+                    $issueBook->status = 1;
+                    $issueBook->save();
+                    $bookStatus = LibraryBook::where('book_no', $request->book_code)->update(['book_status' => 0]);
+                    return Redirect::back()->with('success', 'Book Issue Successfully');
+                }
+                else{
+                    return Redirect::back()->with('danger', 'BT Card is expired!');
+                }
+            }
+            else{
+                return Redirect::back()->with('danger', 'Book is not available!');
+            }
+        }
+        
     }
 }
