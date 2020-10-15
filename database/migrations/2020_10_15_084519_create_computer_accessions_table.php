@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateComputersTable extends Migration
+class CreateComputerAccessionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateComputersTable extends Migration
      */
     public function up()
     {
-        Schema::create('computers', function (Blueprint $table) {
+        Schema::create('computer_accessions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('BT_no');
             $table->string('system_no');
-            $table->boolean('status')->default(1);
+            $table->datetime('start_time');
+            $table->datetime('end_time')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateComputersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('computers');
+        Schema::dropIfExists('computer_accessions');
     }
 }

@@ -215,9 +215,6 @@ class BookTransactionController extends Controller
         $request->validate([
             'book_code' => 'required',
         ]);
-        $books = LibraryBook::all();
-        foreach($books as $b)
-        {
             $checkBookAvailability = LibraryBook::where('book_no', $request->book_code)->first();
             if($checkBookAvailability->book_status == 1)
             {
@@ -246,7 +243,22 @@ class BookTransactionController extends Controller
             else{
                 return Redirect::back()->with('danger', 'Book is not available!');
             }
-        }
         
+    }
+
+    public function studentBookIssueFormUpdate(Request $request)
+    {
+        $bookTransaction = StudentBookIssue::where('id', $request->issueID)->first();
+        $book_status = $request->book_status;
+        $foundjquery = "Not found";
+        if(in_array('jQuery',$book_status)){
+            $foundjquery = "found";
+        }
+        // Converting the array to comma separated string
+        $book_status = implode(",",$book_status);
+        $bookTransaction = StudentBookIssue::where('id', $request->issueID)->update([
+            'actual_return_date' => $request->return_date,
+            'book_status' => $book_status,
+        ]);
     }
 }

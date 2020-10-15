@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\LibraryAccession;
-use DateTime;
+use App\Admin\ComputerAccession;
+use App\Admin\Computer;
 use App\Admin\StudentBT;
 use App\Admin\AcademicYear;
 
-class LibraryAccessionController extends Controller
+class ComputerAccessionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +18,8 @@ class LibraryAccessionController extends Controller
      */
     public function index()
     {
-        // dd($libraryAccession);
-        return view('auth.libraryAccession.index');
+        $computer = Computer::all();
+        return view('auth.computerAccession.index', compact('computer'));
     }
 
     /**
@@ -29,7 +29,7 @@ class LibraryAccessionController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -43,20 +43,27 @@ class LibraryAccessionController extends Controller
         $request->validate([
             'BT_no' => 'required',
             'start_time' => 'required',
+            'system_no' => 'required',
         ]);
         $studentBT = StudentBT::where('BT_no', $request->BT_no)->first();
         $session = AcademicYear::where('id', $studentBT->session)->first();
         $date = date('Y/m/d H:i:s');
         if(($date >= $session->from_academic_year) && ($date <= $session->to_academic_year))
         {
-            $libraryAccession = new LibraryAccession();
-            $libraryAccession->BT_no = $request->BT_no;
-            $libraryAccession->start_time = $request->start_time;
-            $libraryAccession->save();
-            return redirect('/admin/libraryAccession')->with('success', 'Library Accessed');
+            $computerAccession = new ComputerAccession();
+            $computerAccession->BT_no = $request->BT_no;
+            $computerAccession->system_no = $request->system_no;
+            $computerAccession->start_time = $request->start_time;
+            $computerAccession->save();
+            $system = Computer::where('id', $request->system_no)->first();
+            if(!empty($system))
+            {
+                $system = Computer::where('id', $request->system_no)->update(['status' => 0]);
+            }
+            return redirect('/admin/computerAccession')->with('success', 'Computer Accessed');
         }
         else{
-            return redirect('/admin/libraryAccession')->with('danger', 'BT Card is Expired!');
+            return redirect('/admin/computerAccession')->with('danger', 'BT Card is expired');
         }
     }
 
@@ -105,35 +112,29 @@ class LibraryAccessionController extends Controller
         //
     }
 
-    public function searchLibraryAccessionRecord(Request $request)
+    public function searchComputerAccessionRecord(Request $request)
     {
         if($request->ajax()) {
             // select country name from database
-            $data = LibraryAccession::where('start_time', 'LIKE', $request->accession_date.'%')
+            $data = ComputerAccession::where('start_time', 'LIKE', $request->accession_date.'%')
                 ->get();
                 // dd($data);
                 
         
             // declare an empty array for output
             $output = '';
-            // if searched countries count is larager than zero
-            // dd(!(isset($data)) || empty($data));
-            if(!(isset($data)) || empty($data))
-                {
-                    return array("error","Please Enter Valid Referral Code");
-                }
             if (count($data)>0) {
                 // concatenate output to the array
                 // loop through the result array
                 foreach ($data as $key => $row){
-                    // concatenate output to the array
-                    // $parentName = User::where('id', $row->parent_id)->first();
 
                     $user = StudentBT::where('BT_no', $row->BT_no)->first();
+                    $system = Computer::where('id', $row->system_no)->first();
                        $output .= '<tr>'. 
                        '<td>'.++$key.'</td>'.
                        '<td>'.$row->BT_no.'</td>'. 
                        '<td>'.$user->name.'</td>'. 
+                       '<td>'.$system->system_no.'</td>'.
                        '<td>'.$row->start_time.'</td>';
                        if(!$row->end_time){
                        $output .='<td class="endtime_row"><input type="datetime-local" class="form-control form-control-user end_time" name="end_time" placeholder="End Time">'.  
@@ -145,7 +146,6 @@ class LibraryAccessionController extends Controller
                             $output .='<td>'.$row->end_time.'</td>'.  
                             '<td>Updated</td></tr>'; 
                         }
-                    
                 }
                 // end of output
             }
@@ -159,10 +159,16 @@ class LibraryAccessionController extends Controller
         }
     }
 
-    public function updateLibraryAccessionTime(Request $request)
+    public function updateComputerAccessionTime(Request $request)
     {
-        $libraryAccession = LibraryAccession::where('id', $request->id)->first();
-        $libraryAccession->end_time  = $request->end_time;
-        $libraryAccession->update($request->all());
+        $computerAccession = ComputerAccession::where('id', $request->id)->first();
+        $computer = Computer::where('id', $computerAccession->system_no)->first();
+        if(!empty($computer))
+        {
+            $computer = Computer::where('id', $computerAccession->system_no)->update(['status' => 1]);
+        }
+        $computerAccession->end_time  = $request->end_time;
+        $computerAccession->update($request->all());
+        
     }
 }

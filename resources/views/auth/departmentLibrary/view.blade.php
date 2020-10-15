@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Student Book Issue')
+@section('title', 'Department Library')
 @section('customcss')
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -20,16 +20,16 @@
   </div>
   @endif
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Student Book Issue</h1>
+  <h1 class="h3 mb-2 text-gray-800">{{ $department->department }}</h1>
   <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">
         <div class="card-header">
-          Issue Book 
+          Add Book 
         </div>
         <div class="card-body">
-          <form method="post" action="{{ route('admin.studentBookIssueForm.submit') }}">
+          <form method="post" action="">
           @csrf 
             <div class="form-group ">
                 <label>Book Code</label>
@@ -40,8 +40,6 @@
               </span>
               @enderror
             </div>
-            <input type="hidden" name="BT_id" value="{{ $BT_no->id }}">
-            <input type="hidden" name="BT_no" value="{{ $BT_no->BT_no }}">
             <div class="form-group ">
                 <h5 id="book_name"></h5>
             </div>
@@ -88,70 +86,7 @@
             </tr>
           </tfoot>
           <tbody>
-          @foreach($issueBook as $key => $book)
-            <tr>
-                <td>{{ ++$key }}</td>
-                <td>{{ $book->book_no }}</td>
-                <td>
-                <?php
-                    $book_name = DB::table('library_books')->where('book_no', $book->book_no)->first();
-                    // dd($book_name);
-                ?>
-                @if(isset($book_name) && !empty($book_name))
-                    {{ $book_name->book_name }}
-                @endif
-                </td>
-                <td>{{ $book->issue_date }}</td>
-                <td>{{ $book->expected_return_date }}</td>
-                @if(!$book->actual_return_date)
-                <td>
-                  <input type="date" class="form-control form-control-user end_date" name="actual_return_date">
-                </td>
-                <td>
-                  <div class="form-check-inline">
-                    <label class="form-check-label">
-                      <input type="checkbox" name="book_status" class="form-check-input" value="good">Good
-                    </label>
-                  </div>
-                  <div class="form-check-inline">
-                    <label class="form-check-label">
-                      <input type="checkbox" name="book_status" class="form-check-input" value="average">Average
-                    </label>
-                  </div>
-                  <div class="form-check-inline">
-                    <label class="form-check-label">
-                    <input type="checkbox" name="book_status" class="form-check-input" value="poor">Poor
-                    </label>
-                  </div>
-                  <div class="form-check-inline">
-                    <label class="form-check-label">
-                    <input type="checkbox" name="book_status" class="form-check-input" value="missing">Missing
-                    </label>
-                  </div>
-                </td>
-                <td>
-                <button class="btn btn-warning btn-circle update" data-id="{{ $book->id }}">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                </td>
-                @else
-                <td>
-                {{ $book->actual_return_date }}
-                </td>
-                <td>
-                {{ $book->book_status }}
-                </td>
-                <td>
-                Return
-                </td>
-                @endif
-                <td>
-                  <button class="btn btn-warning btn-circle" data-toggle="modal" data-target="#issue{{ $book->id }}">
-                    <i class="fas fa-clone"></i>
-                  </button>
-                </td>
-            </tr>
-          @endforeach
+          
           </tbody>
         </table>
       </div>
@@ -201,32 +136,6 @@ $(document).ready(function () {
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
-});
-</script>
-<script>
-$(document).on('click', '.update', function(){
-		var issueID = $(this).data('id');
-    // alert(issueID);
-		var return_date = $(".end_date").val();
-    var book_status = [];
-		// Initializing array with Checkbox checked values
-		$("input[name='book_status']:checked").each(function(){
-			book_status.push(this.value);
-			// alert(book_status);
-		});
-    if(issueID != ''){
-		$.ajax({
-			url: "{{ route('admin.studentBookIssue.update') }}",
-			method: "POST",
-			data: {issueID:issueID, return_date:return_date, book_status:book_status},
-			success: function(data){
-        alert('Record Updated Successfully.');
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
-			}
-		});
-		}
 });
 </script>
 @endsection

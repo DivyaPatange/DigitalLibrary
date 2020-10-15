@@ -94,6 +94,18 @@
   </div>
 </li>
 <li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+  <i class="fas fa-fw fa-table"></i>
+    <span>All Journal</span>
+  </a>
+  <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <a class="collapse-item" href="{{ route('admin.journals.index') }}">Journal Pdf File</a>
+      <a class="collapse-item" href="{{ url('/admin/journal-list') }}">Add Journal</a>
+    </div>
+  </div>
+</li>
+<li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBookIssue" aria-expanded="true" aria-controls="collapsePages">
     <i class="fas fa-fw fa-folder"></i>
     <span>Book Issue</span>
@@ -111,17 +123,16 @@
     <span>Library Accession</span></a>
 </li>
 <li class="nav-item">
-  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-  <i class="fas fa-fw fa-table"></i>
-    <span>All Journal</span>
-  </a>
-  <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-    <div class="bg-white py-2 collapse-inner rounded">
-      <a class="collapse-item" href="{{ route('admin.journals.index') }}">Journal Pdf File</a>
-      <a class="collapse-item" href="{{ url('/admin/journal-list') }}">Add Journal</a>
-    </div>
-  </div>
+  <a class="nav-link" href="{{ route('admin.computerAccession.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Computer Accession</span></a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.departmentLibrary.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Department Library</span></a>
+</li>
+
 <li class="nav-item">
   <a class="nav-link" href="{{ route('admin.videos.index') }}">
     <i class="fas fa-list"></i>

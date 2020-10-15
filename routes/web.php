@@ -51,6 +51,12 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::post('/updateLibraryAccessionTime', 'LibraryAccessionController@updateLibraryAccessionTime')->name('libraryAccession.updatetime');
     Route::get('/studentBookIssueForm/{id}', 'BookTransactionController@studentBookIssueForm')->name('studentBookIssueForm');
     Route::post('/studentBookIssueForm/submit', 'BookTransactionController@studentBookIssueFormSubmit')->name('studentBookIssueForm.submit');
+    Route::post('/studentBookIssueForm/update', 'BookTransactionController@studentBookIssueFormUpdate')->name('studentBookIssue.update');
+    Route::resource('/computerAccession', 'ComputerAccessionController');
+    Route::get('/searchComputerAccessionRecord', 'ComputerAccessionController@searchComputerAccessionRecord')->name('searchComputerAccessionRecord');
+    Route::post('/updateComputerAccessionTime', 'ComputerAccessionController@updateComputerAccessionTime')->name('computerAccession.updatetime');
+    Route::resource('/departmentLibrary', 'DepartmentLibraryController');
+    Route::get('/departmentBooks/{id}', 'DepartmentLibraryController@viewDepartmentBook')->name('viewDepartmentBook');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');
