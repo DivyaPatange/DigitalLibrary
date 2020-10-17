@@ -57,6 +57,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::post('/updateComputerAccessionTime', 'ComputerAccessionController@updateComputerAccessionTime')->name('computerAccession.updatetime');
     Route::resource('/departmentLibrary', 'DepartmentLibraryController');
     Route::get('/departmentBooks/{id}', 'DepartmentLibraryController@viewDepartmentBook')->name('viewDepartmentBook');
+    Route::resource('/magazines', 'MagazineController');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

@@ -29,10 +29,11 @@
           Add Book 
         </div>
         <div class="card-body">
-          <form method="post" action="">
+          <form method="post" action="{{ route('admin.departmentLibrary.store') }}">
           @csrf 
+            
             <div class="form-group ">
-                <label>Book Code</label>
+              <label>Book Code</label>
               <input type="text" class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" placeholder="Enter Book Code" value="{{ old('book_code') }}">
               @error('book_code')
               <span class="invalid-feedback" role="alert">
@@ -43,6 +44,7 @@
             <div class="form-group ">
                 <h5 id="book_name"></h5>
             </div>
+            <input type="hidden" name="department_id" value="{{ $department->id }}">
             <button type="submit" class="btn btn-primary btn-user btn-block">
               Add
             </button>
@@ -54,7 +56,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Book Issue List</h6>
+      <h6 class="m-0 font-weight-bold text-primary">{{ $department->department }} Department Books</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -64,12 +66,7 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
-              <th>Actual Return Date</th>
-              <th>Book Condition</th>
-              <th>Action</th>
-              <th>Renew</th>
+              <th>Allocation Date</th>
             </tr>
           </thead>
           <tfoot>
@@ -77,16 +74,21 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
-              <th>Actual Return Date</th>
-              <th>Book Condition</th>
-              <th>Action</th>
-              <th>Renew</th>
+              <th>Allocation Date</th>
             </tr>
           </tfoot>
           <tbody>
-          
+          @foreach($departmentBook as $key=>$dB)
+          <tr>
+            <td>{{ ++$key }}</td>
+            <td>{{ $dB->book_no }}</td>
+            <?php
+              $bookName = DB::table('library_books')->where('book_no', $dB->book_no)->first();
+            ?>
+            <td>@if(isset($bookName) && !empty($bookName)){{ $bookName->book_name }}@endif</td>
+            <td>{{ $dB->allocation_date }}</td>
+          </tr>
+          @endforeach
           </tbody>
         </table>
       </div>

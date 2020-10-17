@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\DepartmentLibrary;
-use App\Admin\Department;
-use App\Admin\LibraryBook;
-use Redirect;
+use App\Admin\Magazine;
 
-class DepartmentLibraryController extends Controller
+class MagazineController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +15,8 @@ class DepartmentLibraryController extends Controller
      */
     public function index()
     {
-        $department = Department::all();
-        return view('auth.departmentLibrary.index', compact('department'));
+        $magazines = Magazine::all();
+        return view('auth.magazine.index', compact('magazines'));
     }
 
     /**
@@ -41,25 +38,12 @@ class DepartmentLibraryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'book_code' => 'required',
+            'magazine_name' => 'required',
         ]);
-        $checkBookAvailability = LibraryBook::where('book_no', $request->book_code)->first();
-        if($checkBookAvailability->book_status == 1)
-        {
-            $departmentBook = new DepartmentLibrary();
-            $departmentBook->book_no = $request->book_code;
-            $departmentBook->department_id = $request->department_id;
-            $departmentBook->allocation_date = date('Y-m-d');
-            $departmentBook->save();
-            if($departmentBook->save())
-            {
-                $changeBookStatus = LibraryBook::where('book_no', $request->book_code)->update(['book_status' => 0]);
-            }
-            return Redirect::back()->with('success', 'Book is allotted  to department');
-        }
-        else{
-            return Redirect::back()->with('danger', 'Book is not available');
-        }
+        $magazine = new Magazine();
+        $magazine->magazine_name = $request->magazine_name;
+        $magazine->save();
+        return redirect('/admin/magazines')->with('success', 'Magazine created successfully!');
     }
 
     /**
@@ -81,7 +65,8 @@ class DepartmentLibraryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $magazine = Magazine::findorfail($id);
+        return view('auth.magazine.edit', compact('magazine'));
     }
 
     /**
@@ -93,7 +78,13 @@ class DepartmentLibraryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'magazine_name' => 'required',
+        ]);
+        $magazine = Magazine::findorfail($id);
+        $magazine->magazine_name = $request->magazine_name;
+        $magazine->update($request->all());
+        return redirect('/admin/magazines')->with('success', 'Magazine updated successfully!');
     }
 
     /**
@@ -104,13 +95,8 @@ class DepartmentLibraryController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    public function viewDepartmentBook($id)
-    {
-        $department = Department::findorfail($id);
-        $departmentBook = DepartmentLibrary::where('department_id', $id)->get();
-        return view('auth.departmentLibrary.view', compact('department', 'departmentBook'));
+        $magazine = Magazine::findorfail($id);
+        $magazine->delete();
+        return redirect('/admin/magazines')->with('success', 'Magazine deleted successfully!');
     }
 }

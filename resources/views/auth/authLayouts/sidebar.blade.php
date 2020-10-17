@@ -106,6 +106,11 @@
   </div>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.magazines.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Magazine</span></a>
+</li>
+<li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBookIssue" aria-expanded="true" aria-controls="collapsePages">
     <i class="fas fa-fw fa-folder"></i>
     <span>Book Issue</span>
