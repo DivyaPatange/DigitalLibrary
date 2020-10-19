@@ -8,6 +8,7 @@ use App\Admin\StudentBT;
 use App\Admin\Course;
 use App\Admin\Department;
 use App\Admin\AcademicYear;
+use DB;
 
 class StudentBTCardController extends Controller
 {
@@ -131,5 +132,63 @@ class StudentBTCardController extends Controller
         $studentBT = StudentBT::findorfail($id);
         return view('auth.studentBTCard.view', compact('studentBT'));
 
+    }
+    public function studentBTRecord(Request $request)
+    {
+        if($request->ajax()) 
+        {
+            // select country name from database
+            $academicYear = AcademicYear::where('id', $request->academic_year)
+                ->first();
+            $data = StudentBT::where('session', $academicYear->id)->get();
+            // dd($data);        
+        
+            // declare an empty array for output
+            $output = '';
+            if (count($data)>0) {
+                // concatenate output to the array
+                // loop through the result array
+                foreach ($data as $key => $row){
+                    $course = DB::table('courses')->where('id', $row->class)->first();
+                    $department = DB::table('departments')->where('id', $row->department)->first();
+                    $session = DB::table('academic_years')->where('id', $row->session)->first();
+                       $output .= '<tr>'. 
+                       '<td>'.++$key.'</td>'.
+                       '<td>'.$row->BT_no.'</td>'. 
+                       '<td>'.$row->name.'</td>'.
+                       '<td>';
+                       if(isset($course) && !empty($course))
+                       {
+                        $output .=  $course->course_name;
+                       }
+                       $output .= '</td>'.
+                       '<td>';
+                       if(isset($department) && !empty($department))
+                       {
+                        $output .=  $department->department;
+                       }
+                       $output .= '</td>'.
+                       '<td>';
+                       if(isset($session) && !empty($session))
+                       {
+                        $output .=  '('.$session->from_academic_year.')'. ' - ' . '('.$session->to_academic_year.')';
+                       }
+                       $output .= '</td>'.
+                       '<td>'.'<button data-id="'.$row->id.'" class="btn issueBook btn-info btn-circle">
+                       <i class="fas fa-edit"></i>
+                     </button></td>'.
+                       '</tr>';
+                    
+                }
+                // end of output
+            }
+            
+            else {
+                // if there's no matching results according to the input
+                $output .= 'No results';
+            }
+            // return output result array
+            return $output;
+        }
     }
 }

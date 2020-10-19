@@ -113,7 +113,23 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Student BT Card List</h6>
+    <div class="row">
+        <div class="col-md-8">
+          <h6 class="m-0 font-weight-bold text-primary">Student BT Card List</h6>
+        </div>
+        <div class="col-md-4">
+        <?php
+            $date = date('Y-m-d');
+        ?>
+          <select class="form-control form-control-user @error('academic_year') is-invalid @enderror" name="academic_year" id="academic_year">
+            <option value="">- Select Academic Year -</option>
+            @foreach($academicYear as $a)
+            <option value="{{ $a->id }}" @if (($date >= $a->from_academic_year) && ($date <= $a->to_academic_year)) selected @endif
+  >({{ $a->from_academic_year }}) - ({{ $a->to_academic_year }})</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -140,8 +156,8 @@
               <th>Action</th>
             </tr>
           </tfoot>
-          <tbody>
-          @foreach($studentBT as $key => $s)
+          <tbody id="student_bt">
+          <!-- @foreach($studentBT as $key => $s)
             <tr>
               <td>{{ ++$key }}</td>
               <td>{{ $s->BT_no }}</td>
@@ -177,7 +193,7 @@
                 </form>
               </td>
             </tr>
-          @endforeach
+          @endforeach -->
           </tbody>
         </table>
       </div>
@@ -198,4 +214,49 @@ $(document).ready(function() {
         $('#dataTable').DataTable();
     } );
 </script>
+<script type="text/javascript">
+function loadContent() {
+  var query = document.getElementById("academic_year").value;
+        // alert(query);
+        $.ajax({
+            // assign a controller function to perform search action - route name is search
+            url:"{{ route('admin.studentBTRecord') }}",
+            // since we are getting data methos is assigned as GET
+            type:"GET",
+            // data are sent the server
+            data:{'academic_year':query},
+            // if search is succcessfully done, this callback function is called
+            success:function (data) {
+                // print the search results in the div called country_list(id)
+                $('#student_bt').html(data);
+                
+            }
+        })
+}
+window.onload = loadContent;
+</script>
+<script>
+  $(document).ready(function () {
+    // keyup function looks at the keys typed on the search box
+    $('#academic_year').on('change',function() {
+        // the text typed in the input field is assigned to a variable 
+        var query = $(this).val();
+        
+        $.ajax({
+            // assign a controller function to perform search action - route name is search
+            url:"{{ route('admin.studentBTRecord') }}",
+            // since we are getting data methos is assigned as GET
+            type:"GET",
+            // data are sent the server
+            data:{'academic_year':query},
+            // if search is succcessfully done, this callback function is called
+            success:function (data) {
+                // print the search results in the div called country_list(id)
+                $('#student_bt').html(data);
+            }
+        })
+
+    });
+  });
+  </script>
 @endsection

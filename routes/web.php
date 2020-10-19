@@ -38,6 +38,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/sellers', 'SellerController');
     Route::resource('/publications', 'PublicationController');
     Route::resource('/student-bt-card', 'StudentBTCardController');
+    Route::get('/studentBTRecord', 'StudentBTCardController@studentBTRecord')->name('studentBTRecord');
     Route::resource('/faculty-bt-card', 'FacultyBTCardController');
     Route::resource('/rack-with-wing', 'RackWingController');
     Route::resource('/libraryBook', 'LibraryBookController');
@@ -65,6 +66,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/facultyBookIssue', 'FacultyBookIssueController');
     Route::get('/facultyRecord', 'FacultyBookIssueController@facultyRecord')->name('facultyRecord');
     Route::post('/facultyBookIssue/submit', 'FacultyBookIssueController@facultyBookIssueSubmit')->name('facultyBookIssue.submit');
+    Route::post('/facultyBookRenew', 'FacultyBookIssueController@facultyBookRenew')->name('facultyBookIssue.renew');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

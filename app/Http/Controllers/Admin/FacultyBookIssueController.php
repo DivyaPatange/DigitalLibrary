@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Admin\FacultyBookIssue;
+use App\Admin\FacultyBookIssueDate;
 use App\Admin\FacultyBT;
 use App\Admin\LibraryBook;
 use App\Admin\AcademicYear;
@@ -58,9 +59,15 @@ class FacultyBookIssueController extends Controller
                 $issueBook = new FacultyBookIssue();
                 $issueBook->BT_no = $request->BT_no;
                 $issueBook->book_no = $request->book_code;
-                $issueBook->issue_date = $date;
-                $issueBook->expected_return_date = $expected_date;
                 $issueBook->save();
+                if($issueBook->save())
+                {
+                    $issueDate = new FacultyBookIssueDate();
+                    $issueDate->faculty_book_issue_id = $issueBook->id;
+                    $issueDate->issue_date = $date;
+                    $issueDate->expected_return_date = $expected_date;
+                    $issueDate->save();
+                }
                 $bookStatus = LibraryBook::where('book_no', $request->book_code)->update(['book_status' => 0]);
                 return redirect()->route('admin.facultyBookIssue.show', $facultyBT->id)->with('success', 'Book Issue Successfully');
             }
@@ -213,5 +220,18 @@ class FacultyBookIssueController extends Controller
         {
             $libraryBook = LibraryBook::where('book_no', $facultyBookReturn->book_no)->update(['book_status' => 1]);
         }
+    }
+
+    public function facultyBookRenew(Request $request)
+    {
+        $issueBook = FacultyBookIssue::where('id', $request->issueID)->first();
+        $date = date("2020-10-29");
+        $increment_date = strtotime("+7 day", strtotime($date));  
+        $expected_date = date("Y-m-d", $increment_date);
+        $renewBook = new FacultyBookIssueDate();
+        $renewBook->faculty_book_issue_id = $issueBook->id;
+        $renewBook->issue_date = $date;
+        $renewBook->expected_return_date = $expected_date;
+        $renewBook->save();
     }
 }

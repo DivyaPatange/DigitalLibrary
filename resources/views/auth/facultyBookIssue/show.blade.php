@@ -21,7 +21,7 @@
   @endif
   <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">Faculty Book Issue</h1>
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">
@@ -34,43 +34,6 @@
             <div class="form-group ">
                 <label>Book Code</label>
               <input type="text" class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" placeholder="Enter Book Code" value="{{ old('book_code') }}">
-              @error('book_code')
-              <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-              </span>
-              @enderror
-            </div>
-            <input type="hidden" name="BT_no" value="{{ $facultyBT->BT_no }}">
-            <div class="form-group ">
-                <h5 id="book_name"></h5>
-            </div>
-            <button type="submit" class="btn btn-primary btn-user btn-block">
-              Add
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <!-- Basic Card Example -->
-      <div class="card shadow mb-4">
-        <div class="card-header">
-          Renew Book 
-        </div>
-        <div class="card-body">
-          <form method="post" action="{{ route('admin.facultyBookIssue.store') }}">
-          @csrf 
-            <div class="form-group ">
-                <label>Book</label>
-              <select class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" >
-                <option>-Select Book-</option>
-                @foreach($renewBook as $r)
-                <?php
-                  $row = DB::table('library_books')->where('book_no', $r->book_no)->first();
-                ?>
-                <option value="@if(isset($row) && !empty($row)) {{ $row->book_no }} @endif">@if(isset($row) && !empty($row)) {{ $row->book_name }} @endif</option>
-                @endforeach
-              </select>
               @error('book_code')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -106,8 +69,8 @@
               <th>Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
-              <th>Action</th>
               <th>Penalty</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tfoot>
@@ -119,8 +82,8 @@
               <th>Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
-              <th>Action</th>
               <th>Penalty</th>
+              <th>Action</th>
             </tr>
           </tfoot>
           <tbody>
@@ -137,8 +100,19 @@
             {{ $book_name->book_name }}
             @endif
             </td>
-            <td>{{ $b->issue_date }}</td>
-            <td>{{ $b->expected_return_date }}</td>
+            <?php
+              $issueDates = DB::table('faculty_book_issue_dates')->where('faculty_book_issue_id', $b->id)->get();
+            ?>
+            <td class="p-0">
+            @foreach($issueDates as $i)
+              <div style="border-bottom: 1px solid #9487a3;">{{ $i->issue_date }}</div>
+            @endforeach
+            </td>
+            <td class="p-0">
+            @foreach($issueDates as $i)
+              <div style="border-bottom: 1px solid #9487a3;">{{ $i->expected_return_date }}</div>
+            @endforeach
+            </td>
             <td>
             @if(!$b->actual_return_date)
             <input type="date" class="form-control form-control-user end_date" name="actual_return_date">
@@ -196,12 +170,17 @@
                   @endif
                 </td>
                 <td>
+                {{ $b->penalty }}
+                </td>
+                
+                <td>
                 <button class="btn btn-warning btn-circle update" data-id="{{ $b->id }}">
                     <i class="fas fa-edit"></i>
                   </button>
-                </td>
-                
-                <td>{{ $b->penalty }}</td>
+                 <button class="btn btn-info btn-circle renew @if($b->actual_return_date) disabled @endif" data-id="{{ $b->id }}">
+                    <i class="fas fa-book"></i>
+                  </button>
+                  </td>
           </tr>
           @endforeach
           </tbody>
@@ -277,6 +256,27 @@ $(document).on('click', '.update', function(){
 			data: {issueID:issueID, return_date:return_date, book_status:book_status},
 			success: function(data){
         alert('Record Updated Successfully.');
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+			}
+		});
+		}
+});
+</script>
+<script>
+$(document).on('click', '.renew', function(){
+    var $row = $(this).closest("tr");
+    // $row.find(".nr").
+		var issueID = $row.find(".renew").data('id');
+    // alert(issueID);
+    if(issueID != ''){
+		$.ajax({
+			url: "{{ route('admin.facultyBookIssue.renew') }}",
+			method: "POST",
+			data: {issueID:issueID},
+			success: function(data){
+        alert('Renew Book Successfully.');
         setTimeout(() => {
             location.reload();
         }, 1000);
