@@ -21,7 +21,7 @@
   @endif
   <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">Faculty Book Issue</h1>
-  <div class="row justify-content-center">
+  <div class="row">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">
@@ -34,6 +34,43 @@
             <div class="form-group ">
                 <label>Book Code</label>
               <input type="text" class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" placeholder="Enter Book Code" value="{{ old('book_code') }}">
+              @error('book_code')
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+              </span>
+              @enderror
+            </div>
+            <input type="hidden" name="BT_no" value="{{ $facultyBT->BT_no }}">
+            <div class="form-group ">
+                <h5 id="book_name"></h5>
+            </div>
+            <button type="submit" class="btn btn-primary btn-user btn-block">
+              Add
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <!-- Basic Card Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header">
+          Renew Book 
+        </div>
+        <div class="card-body">
+          <form method="post" action="{{ route('admin.facultyBookIssue.store') }}">
+          @csrf 
+            <div class="form-group ">
+                <label>Book</label>
+              <select class="form-control form-control-user @error('book_code') is-invalid @enderror" name="book_code" id="book_code" >
+                <option>-Select Book-</option>
+                @foreach($renewBook as $r)
+                <?php
+                  $row = DB::table('library_books')->where('book_no', $r->book_no)->first();
+                ?>
+                <option value="@if(isset($row) && !empty($row)) {{ $row->book_no }} @endif">@if(isset($row) && !empty($row)) {{ $row->book_name }} @endif</option>
+                @endforeach
+              </select>
               @error('book_code')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>

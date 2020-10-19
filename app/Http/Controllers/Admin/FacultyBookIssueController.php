@@ -84,7 +84,9 @@ class FacultyBookIssueController extends Controller
     {
         $facultyBT = FacultyBT::findorfail($id);
         $bookIssue = FacultyBookIssue::where('BT_no', $facultyBT->BT_no)->get();
-        return view('auth.facultyBookIssue.show', compact('facultyBT','bookIssue'));
+        $renewBook = FacultyBookIssue::where('BT_no', $facultyBT->BT_no)->where('actual_return_date', '=', NULL)->get();
+        // dd($renewBook);
+        return view('auth.facultyBookIssue.show', compact('facultyBT','bookIssue', 'renewBook'));
     }
 
     /**
@@ -150,8 +152,8 @@ class FacultyBookIssueController extends Controller
 
     public function facultyBookIssueSubmit(Request $request)
     {
-        $bookBank = BookBank::where('id', $request->issueID)->first();
-        $book = LibraryBook::where('book_no', $bookBank->book_no)->first();
+        $issueBook = FacultyBookIssue::where('id', $request->issueID)->first();
+        $book = LibraryBook::where('book_no', $issueBook->book_no)->first();
         $book_status = $request->book_status;
         // dd($book_status);
         $foundjquery = "Not found";
@@ -187,7 +189,7 @@ class FacultyBookIssueController extends Controller
             $penaltyA =0;
         }
         $date1 = $request->return_date; 
-        $date2 = $bookBank->expected_return_date;
+        $date2 = $issueBook->expected_return_date;
          
         if($date1 > $date2)
         {
@@ -201,15 +203,15 @@ class FacultyBookIssueController extends Controller
        
         // Converting the array to comma separated string
         $book_status = implode(",",$book_status);
-        $bookBank = BookBank::where('id', $request->issueID)->update([
+        $bookBank = FacultyBookIssue::where('id', $request->issueID)->update([
             'actual_return_date' => $request->return_date,
             'book_condition' => $book_status,
             'penalty' => ($penaltyPoor + $penaltyMissing + $penaltyA + $penaltyG + $penaltyDays),
         ]);
-        $studentBookReturn = BookBank::where('id', $request->issueID)->first();
-        if($studentBookReturn->actual_return_date)
+        $facultyBookReturn = FacultyBookIssue::where('id', $request->issueID)->first();
+        if($facultyBookReturn->actual_return_date)
         {
-            $libraryBook = LibraryBook::where('book_no', $studentBookReturn->book_no)->update(['book_status' => 1]);
+            $libraryBook = LibraryBook::where('book_no', $facultyBookReturn->book_no)->update(['book_status' => 1]);
         }
     }
 }
