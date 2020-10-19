@@ -1,5 +1,5 @@
 @extends('auth.authLayouts.main')
-@section('title', 'Student Book Issue')
+@section('title', 'Faculty Book Issue')
 @section('customcss')
 
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -20,7 +20,7 @@
   </div>
   @endif
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Student Book Issue</h1>
+  <h1 class="h3 mb-2 text-gray-800">Faculty Book Issue</h1>
   <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
@@ -29,7 +29,7 @@
           Issue Book 
         </div>
         <div class="card-body">
-          <form method="post" action="{{ route('admin.studentBookIssueForm.submit') }}">
+          <form method="post" action="{{ route('admin.facultyBookIssue.store') }}">
           @csrf 
             <div class="form-group ">
                 <label>Book Code</label>
@@ -40,8 +40,7 @@
               </span>
               @enderror
             </div>
-            <input type="hidden" name="BT_id" value="{{ $BT_no->id }}">
-            <input type="hidden" name="BT_no" value="{{ $BT_no->BT_no }}">
+            <input type="hidden" name="BT_no" value="{{ $facultyBT->BT_no }}">
             <div class="form-group ">
                 <h5 id="book_name"></h5>
             </div>
@@ -88,30 +87,30 @@
             </tr>
           </tfoot>
           <tbody>
-          @foreach($issueBook as $key => $book)
-            <tr>
-                <td>{{ ++$key }}</td>
-                <td>{{ $book->book_no }}</td>
-                <td>
-                <?php
-                    $book_name = DB::table('library_books')->where('book_no', $book->book_no)->first();
-                    // dd($book_name);
-                ?>
-                @if(isset($book_name) && !empty($book_name))
-                    {{ $book_name->book_name }}
-                @endif
-                </td>
-                <td>{{ $book->issue_date }}</td>
-                <td>{{ $book->expected_return_date }}</td>
-                <td>
-            @if(!$book->actual_return_date)
+          @foreach($bookIssue as $key=>$b)
+          <tr>
+            <td>{{ ++$key }}</td>
+            <td>{{ $b->book_no }}</td>
+            <td>
+            <?php
+                $book_name = DB::table('library_books')->where('book_no', $b->book_no)->first();
+                // dd($book_name);
+            ?>
+            @if(isset($book_name) && !empty($book_name))
+            {{ $book_name->book_name }}
+            @endif
+            </td>
+            <td>{{ $b->issue_date }}</td>
+            <td>{{ $b->expected_return_date }}</td>
+            <td>
+            @if(!$b->actual_return_date)
             <input type="date" class="form-control form-control-user end_date" name="actual_return_date">
             @else
-            <input type="date" class="form-control form-control-user end_date" name="actual_return_date" value="{{ $book->actual_return_date }}">
+            <input type="date" class="form-control form-control-user end_date" name="actual_return_date" value="{{ $b->actual_return_date }}">
             @endif
             </td>
             <td>
-            @if(!$book->book_status)
+            @if(!$b->book_condition)
 
                   <div class="form-check-inline">
                     <label class="form-check-label">
@@ -135,7 +134,7 @@
                   </div>
                   @else
                   <?php
-                  $explode = explode(",", $book->book_status);
+                  $explode = explode(",", $b->book_condition);
                   ?>
                   <div class="form-check-inline">
                     <label class="form-check-label">
@@ -160,14 +159,13 @@
                   @endif
                 </td>
                 <td>
-                <button class="btn btn-warning btn-circle update" data-id="{{ $book->id }}">
+                <button class="btn btn-warning btn-circle update" data-id="{{ $b->id }}">
                     <i class="fas fa-edit"></i>
                   </button>
                 </td>
-                <td>
-                  {{ $book->penalty }}
-                </td>
-            </tr>
+                
+                <td>{{ $b->penalty }}</td>
+          </tr>
           @endforeach
           </tbody>
         </table>
@@ -223,19 +221,21 @@ $(document).ready(function () {
 <script>
 $(document).on('click', '.update', function(){
     var $row = $(this).closest("tr");
+    // $row.find(".nr").
 		var issueID = $row.find(".update").data('id');
+    // alert(issueID);
 		var return_date = $row.find(".end_date").val();
     // alert(return_date);
     var book_status = [];
 		// Initializing array with Checkbox checked values
 		$row.find("input[name='book_status']:checked").each(function(){
 			book_status.push(this.value);
-		});
-    
 			// alert(book_status);
+		});
+    // alert(book_status);
     if(issueID != ''){
 		$.ajax({
-			url: "{{ route('admin.studentBookIssue.update') }}",
+			url: "{{ route('admin.facultyBookIssue.submit') }}",
 			method: "POST",
 			data: {issueID:issueID, return_date:return_date, book_status:book_status},
 			success: function(data){

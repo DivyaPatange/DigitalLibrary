@@ -47,7 +47,7 @@
                                 <div class="form-group ">
                                     <label>Class</label>
                                     <select class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName">
-                                        <option value="">- Select Course -</option>
+                                        <option value="">- Select Class -</option>
                                         @foreach($course as $c)
                                         <option value="{{ $c->id }}">{{ $c->course_name }}</option>
                                         @endforeach
@@ -90,6 +90,12 @@
                                     </span>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="form-check">
+                            <input type="checkbox" name="book_bank" class="form-check-input" id="exampleCheck1" value="1">
+                            <label class="form-check-label" for="exampleCheck1">Book Bank</label>
+                            </div>
                             </div>
                         </div>
                         <div class="row">

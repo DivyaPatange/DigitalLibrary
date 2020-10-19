@@ -58,6 +58,13 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/departmentLibrary', 'DepartmentLibraryController');
     Route::get('/departmentBooks/{id}', 'DepartmentLibraryController@viewDepartmentBook')->name('viewDepartmentBook');
     Route::resource('/magazines', 'MagazineController');
+    Route::resource('/bookBank', 'BookBankController');
+    Route::post('/bookBank/submit', 'BookBankController@submit')->name('bookBank.submit');
+    Route::get('/bookBankRecord', 'BookBankController@bookBankRecord')->name('bookBankRecord');
+    Route::get('/bookTransactionRecord', 'BookTransactionController@bookTransactionRecord')->name('bookTransactionRecord');
+    Route::resource('/facultyBookIssue', 'FacultyBookIssueController');
+    Route::get('/facultyRecord', 'FacultyBookIssueController@facultyRecord')->name('facultyRecord');
+    Route::post('/facultyBookIssue/submit', 'FacultyBookIssueController@facultyBookIssueSubmit')->name('facultyBookIssue.submit');
 });
 Route::get('/user/books', 'Admin\BooksController@viewBook')->middleware('can:user')->name('user.books.index');
 Route::get('/book/{id}', 'Admin\BooksController@showBook')->name('book.view');

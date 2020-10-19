@@ -118,7 +118,7 @@
   <div id="collapseBookIssue" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <a class="collapse-item" href="{{ route('admin.bookTransaction.index') }}">Student Book Issue</a>
-      <a class="collapse-item" href="#">Faculty Book Issue</a>
+      <a class="collapse-item" href="{{ route('admin.facultyBookIssue.index') }}">Faculty Book Issue</a>
     </div>
   </div>
 </li>
@@ -136,6 +136,12 @@
   <a class="nav-link" href="{{ route('admin.departmentLibrary.index') }}">
     <i class="fas fa-list"></i>
     <span>Department Library</span></a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('admin.bookBank.index') }}">
+    <i class="fas fa-list"></i>
+    <span>Book Bank</span></a>
 </li>
 
 <li class="nav-item">

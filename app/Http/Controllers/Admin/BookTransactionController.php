@@ -21,7 +21,8 @@ class BookTransactionController extends Controller
     public function index()
     {
         $bookTransaction = BookTransaction::all();
-        return view('auth.bookTransaction.index', compact('bookTransaction'));
+        $academicYear = AcademicYear::all();
+        return view('auth.bookTransaction.index', compact('bookTransaction', 'academicYear'));
     }
 
     /**
@@ -249,16 +250,102 @@ class BookTransactionController extends Controller
     public function studentBookIssueFormUpdate(Request $request)
     {
         $bookTransaction = StudentBookIssue::where('id', $request->issueID)->first();
+        $book = LibraryBook::where('book_no', $bookTransaction->book_no)->first();
         $book_status = $request->book_status;
         $foundjquery = "Not found";
         if(in_array('jQuery',$book_status)){
             $foundjquery = "found";
+        }
+        if(in_array("poor", $book_status))
+        {
+            $penaltyPoor = (0.5 * $book->price);
+        }
+        else{
+            $penaltyPoor = 0;
+        }
+        if(in_array("missing", $book_status))
+        {
+            $penaltyMissing = (1.5 * $book->price);
+        }
+        else{
+            $penaltyMissing = 0;
+        }
+        if(in_array("good", $book_status))
+        {
+            $penaltyG = 0;
+        }
+        else{
+            $penaltyG = 0;
+        }
+        if(in_array("average", $book_status))
+        {
+            $penaltyA = 0;
+        }
+        else{
+            $penaltyA =0;
+        }
+        $date1 = $request->return_date; 
+        $date2 = $bookTransaction->expected_return_date;
+         
+        if($date1 > $date2)
+        {
+            $diff = strtotime($date2) - strtotime($date1); 
+            $days = abs(round($diff / 86400));
+            $penaltyDays = 2 * $days;
+        }
+        else{
+            $penaltyDays = 0;
         }
         // Converting the array to comma separated string
         $book_status = implode(",",$book_status);
         $bookTransaction = StudentBookIssue::where('id', $request->issueID)->update([
             'actual_return_date' => $request->return_date,
             'book_status' => $book_status,
+            'penalty' => $penaltyA + $penaltyG + $penaltyPoor + $penaltyMissing + $penaltyDays,
         ]);
+        $studentBookReturn = StudentBookIssue::where('id', $request->issueID)->first();
+        if($studentBookReturn->actual_return_date)
+        {
+            $libraryBook = LibraryBook::where('book_no', $studentBookReturn->book_no)->update(['book_status' => 1]);
+        }
+    }
+
+    public function bookTransactionRecord(Request $request)
+    {
+        if($request->ajax()) 
+        {
+            // select country name from database
+            $academicYear = AcademicYear::where('id', $request->academic_year)
+                ->first();
+            $data = BookTransaction::whereBetween('created_at', [$academicYear->from_academic_year, $academicYear->to_academic_year])->get();
+            // dd($data);        
+        
+            // declare an empty array for output
+            $output = '';
+            if (count($data)>0) {
+                // concatenate output to the array
+                // loop through the result array
+                foreach ($data as $key => $row){
+                    $studentBT = StudentBT::where('BT_no', $row->BT_no)->first();
+                       $output .= '<tr>'. 
+                       '<td>'.++$key.'</td>'.
+                       '<td>'.$row->BT_no.'</td>'. 
+                       '<td>'.$studentBT->name.'</td>'. 
+                       '<td>'.'<button data-id="'.$row->id.'" class="btn issueBook btn-info btn-circle">
+                       <i class="fas fa-eye"></i>
+                     </button></td>'.
+                       '</tr>';
+                    
+                }
+                // end of output
+            }
+            
+            else {
+                // if there's no matching results according to the input
+                $output .= 'No results';
+            }
+            // return output result array
+            return $output;
+        }
     }
 }

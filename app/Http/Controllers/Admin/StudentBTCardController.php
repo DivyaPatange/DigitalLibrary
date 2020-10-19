@@ -56,6 +56,9 @@ class StudentBTCardController extends Controller
         $studentBT->class = $request->class;
         $studentBT->department = $request->department;
         $studentBT->session = $request->session;
+        if($request->book_bank){
+        $studentBT->book_bank = $request->book_bank;
+        }
         $studentBT->save();
         return redirect('/admin/student-bt-card')->with('success', 'BT Card added successfully!');
     }
