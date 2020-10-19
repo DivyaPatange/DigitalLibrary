@@ -225,13 +225,21 @@ class FacultyBookIssueController extends Controller
     public function facultyBookRenew(Request $request)
     {
         $issueBook = FacultyBookIssue::where('id', $request->issueID)->first();
-        $date = date("2020-10-29");
+        $lastIssueBookArray = FacultyBookIssueDate::where('faculty_book_issue_id', $issueBook->id)->get();
+        $lastIssueBook = end($lastIssueBookArray);
+        $date = date("2020-10-28");
         $increment_date = strtotime("+7 day", strtotime($date));  
         $expected_date = date("Y-m-d", $increment_date);
         $renewBook = new FacultyBookIssueDate();
         $renewBook->faculty_book_issue_id = $issueBook->id;
         $renewBook->issue_date = $date;
         $renewBook->expected_return_date = $expected_date;
+        if($date > $lastIssueBook->expected_return_date)
+        {
+            $diff = strtotime($date) - strtotime($lastIssueBook->expected_return_date); 
+            $days = abs(round($diff / 86400));
+            $renewBook->penalty_days = $days;
+        }
         $renewBook->save();
     }
 }

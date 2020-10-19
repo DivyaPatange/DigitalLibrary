@@ -10,7 +10,7 @@
 
 <!-- Page level plugins -->
 <script src="{{ asset('adminAsset/vendor/chart.js/Chart.min.js') }}"></script>
-
+<script src="{{ URL::asset('swal.js') }}"></script>
 <!-- Page level custom scripts -->
 <script src="{{ asset('adminAsset/js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('adminAsset/js/demo/chart-pie-demo.js') }}"></script>

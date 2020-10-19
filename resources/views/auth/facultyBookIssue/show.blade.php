@@ -1,7 +1,8 @@
 @extends('auth.authLayouts.main')
 @section('title', 'Faculty Book Issue')
 @section('customcss')
-
+<link data-require="sweet-alert@*" data-semver="0.4.2" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
@@ -91,6 +92,9 @@
           <tr>
             <td>{{ ++$key }}</td>
             <td>{{ $b->book_no }}</td>
+            <?php
+              $issueDates = DB::table('faculty_book_issue_dates')->where('faculty_book_issue_id', $b->id)->get();
+            ?>
             <td>
             <?php
                 $book_name = DB::table('library_books')->where('book_no', $b->book_no)->first();
@@ -100,19 +104,16 @@
             {{ $book_name->book_name }}
             @endif
             </td>
-            <?php
-              $issueDates = DB::table('faculty_book_issue_dates')->where('faculty_book_issue_id', $b->id)->get();
-            ?>
-            <td class="p-0">
+            <td>
             @foreach($issueDates as $i)
-              <div style="border-bottom: 1px solid #9487a3;">{{ $i->issue_date }}</div>
+            {{ $i->issue_date }}<br>
             @endforeach
             </td>
-            <td class="p-0">
+            <td>
             @foreach($issueDates as $i)
-              <div style="border-bottom: 1px solid #9487a3;">{{ $i->expected_return_date }}</div>
+            {{ $i->expected_return_date }}<br>
             @endforeach
-            </td>
+          </td>
             <td>
             @if(!$b->actual_return_date)
             <input type="date" class="form-control form-control-user end_date" name="actual_return_date">
@@ -177,7 +178,7 @@
                 <button class="btn btn-warning btn-circle update" data-id="{{ $b->id }}">
                     <i class="fas fa-edit"></i>
                   </button>
-                 <button class="btn btn-info btn-circle renew @if($b->actual_return_date) disabled @endif" data-id="{{ $b->id }}">
+                 <button class="btn btn-info btn-circle @if(count($issueDates) == 4) @elseif(!$b->actual_return_date) renew  @endif"  data-id="{{ $b->id }}"  >
                     <i class="fas fa-book"></i>
                   </button>
                   </td>
@@ -276,10 +277,12 @@ $(document).on('click', '.renew', function(){
 			method: "POST",
 			data: {issueID:issueID},
 			success: function(data){
-        alert('Renew Book Successfully.');
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
+        Swal.fire(
+          'Book Renew Successfully!',
+          )
+          setTimeout(() => {
+              location.reload();
+          }, 2000);
 			}
 		});
 		}
