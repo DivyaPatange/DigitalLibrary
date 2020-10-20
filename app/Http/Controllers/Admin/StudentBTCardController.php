@@ -18,12 +18,21 @@ class StudentBTCardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $course = Course::all();
         $department = Department::all();
         $academicYear = AcademicYear::all();
-        $studentBT = StudentBT::all();
+        $date = date('Y-m-d');
+        foreach($academicYear as $a)
+        {
+            if (($date >= $a->from_academic_year) && ($date <= $a->to_academic_year))
+            {
+                $current_session = $a->id;
+            }
+        }
+        $studentBT = StudentBT::where('session', $current_session)->get();
+        // dd($studentBT);
         return view('auth.studentBTCard.index', compact('studentBT', 'course', 'department', 'academicYear'));
     }
 

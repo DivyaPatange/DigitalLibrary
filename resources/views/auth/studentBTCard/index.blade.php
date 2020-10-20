@@ -157,7 +157,7 @@
             </tr>
           </tfoot>
           <tbody id="student_bt">
-          <!-- @foreach($studentBT as $key => $s)
+          @foreach($studentBT as $key => $s)
             <tr>
               <td>{{ ++$key }}</td>
               <td>{{ $s->BT_no }}</td>
@@ -193,7 +193,7 @@
                 </form>
               </td>
             </tr>
-          @endforeach -->
+          @endforeach
           </tbody>
         </table>
       </div>
@@ -204,27 +204,6 @@
 @endsection
 @section('customjs')
 
-<script type="text/javascript">
-function loadContent() {
-  var query = document.getElementById("academic_year").value;
-        // alert(query);
-        $.ajax({
-            // assign a controller function to perform search action - route name is search
-            url:"{{ route('admin.studentBTRecord') }}",
-            // since we are getting data methos is assigned as GET
-            type:"GET",
-            // data are sent the server
-            data:{'academic_year':query},
-            // if search is succcessfully done, this callback function is called
-            success:function (data) {
-                // print the search results in the div called country_list(id)
-                $('#student_bt').html(data);
-                
-            }
-        })
-}
-window.onload = loadContent;
-</script>
 <script>
   $(document).ready(function () {
     // keyup function looks at the keys typed on the search box
