@@ -9,6 +9,7 @@ use App\Admin\FacultyBookIssueDate;
 use App\Admin\FacultyBT;
 use App\Admin\LibraryBook;
 use App\Admin\AcademicYear;
+use DB;
 
 class FacultyBookIssueController extends Controller
 {
@@ -161,6 +162,12 @@ class FacultyBookIssueController extends Controller
     {
         $issueBook = FacultyBookIssue::where('id', $request->issueID)->first();
         $book = LibraryBook::where('book_no', $issueBook->book_no)->first();
+        $lastIssueBookArray = FacultyBookIssueDate::where('faculty_book_issue_id', $issueBook->id)->get();
+        foreach($lastIssueBookArray as $l)
+        {
+            $array[] = $l;
+        }
+        $lastIssueBook = end($array);
         $book_status = $request->book_status;
         // dd($book_status);
         $foundjquery = "Not found";
@@ -196,24 +203,24 @@ class FacultyBookIssueController extends Controller
             $penaltyA =0;
         }
         $date1 = $request->return_date; 
-        $date2 = $issueBook->expected_return_date;
+        $date2 = $lastIssueBook->expected_return_date;
          
         if($date1 > $date2)
         {
             $diff = strtotime($date2) - strtotime($date1); 
             $days = abs(round($diff / 86400));
-            $penaltyDays = 2 * $days;
+            $updatePenaltyDays = DB::table('faculty_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => $days]);
         }
         else{
-            $penaltyDays = 0;
+            $updatePenaltyDays = DB::table('faculty_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => 0]);
         }
-       
+        $penaltyArray = FacultyBookIssueDate::where('faculty_book_issue_id', $issueBook->id)->get()->sum('penalty_days');
         // Converting the array to comma separated string
         $book_status = implode(",",$book_status);
         $bookBank = FacultyBookIssue::where('id', $request->issueID)->update([
             'actual_return_date' => $request->return_date,
             'book_condition' => $book_status,
-            'penalty' => ($penaltyPoor + $penaltyMissing + $penaltyA + $penaltyG + $penaltyDays),
+            'penalty' => ($penaltyPoor + $penaltyMissing + $penaltyA + $penaltyG + ($penaltyArray * 2)),
         ]);
         $facultyBookReturn = FacultyBookIssue::where('id', $request->issueID)->first();
         if($facultyBookReturn->actual_return_date)
@@ -226,19 +233,28 @@ class FacultyBookIssueController extends Controller
     {
         $issueBook = FacultyBookIssue::where('id', $request->issueID)->first();
         $lastIssueBookArray = FacultyBookIssueDate::where('faculty_book_issue_id', $issueBook->id)->get();
-        $lastIssueBook = end($lastIssueBookArray);
-        $date = date("2020-10-28");
+        foreach($lastIssueBookArray as $l)
+        {
+            $array[] = $l;
+        }
+        $lastIssueBook = end($array);
+        $date = date('Y/m/d H:i:s');
         $increment_date = strtotime("+7 day", strtotime($date));  
         $expected_date = date("Y-m-d", $increment_date);
         $renewBook = new FacultyBookIssueDate();
         $renewBook->faculty_book_issue_id = $issueBook->id;
         $renewBook->issue_date = $date;
         $renewBook->expected_return_date = $expected_date;
-        if($date > $lastIssueBook->expected_return_date)
+        $convertDate = strtotime($date);
+        $convertedDate = date("Y-m-d", $convertDate);
+        if($convertedDate > $lastIssueBook->expected_return_date)
         {
-            $diff = strtotime($date) - strtotime($lastIssueBook->expected_return_date); 
+            $diff = strtotime($convertedDate) - strtotime($lastIssueBook->expected_return_date); 
             $days = abs(round($diff / 86400));
-            $renewBook->penalty_days = $days;
+            $book = DB::table('faculty_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => $days]);
+        }
+        else{
+            $book = DB::table('faculty_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => 0]); 
         }
         $renewBook->save();
     }

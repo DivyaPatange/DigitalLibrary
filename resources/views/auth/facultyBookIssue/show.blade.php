@@ -66,8 +66,7 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
+              <th>Issue Date / Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
               <th>Penalty</th>
@@ -79,8 +78,7 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
+              <th>Issue Date / Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
               <th>Penalty</th>
@@ -88,7 +86,25 @@
             </tr>
           </tfoot>
           <tbody>
+          <?php
+          //  $date = date('Y/m/d H:i:s');
+          //  $convertDate = strtotime($date);
+          //  dd($date);
+          //  dd(date("Y-m-d", $convertDate));
+          ?>
           @foreach($bookIssue as $key=>$b)
+          <?php
+            // $issueBook = DB::table('faculty_book_issues')->where('id', $b->id)->first();
+            // $lastIssueBookArray = DB::table('faculty_book_issue_dates')->where('faculty_book_issue_id', $issueBook->id)->get();
+            // foreach($lastIssueBookArray as $l)
+            // {
+              
+            // $items[] = $l;
+            // }
+            // $lastIssueBook = end($items);
+            
+            // dd($book);
+          ?>
           <tr>
             <td>{{ ++$key }}</td>
             <td>{{ $b->book_no }}</td>
@@ -104,16 +120,17 @@
             {{ $book_name->book_name }}
             @endif
             </td>
-            <td>
-            @foreach($issueDates as $i)
-            {{ $i->issue_date }}<br>
-            @endforeach
-            </td>
-            <td>
-            @foreach($issueDates as $i)
-            {{ $i->expected_return_date }}<br>
-            @endforeach
-          </td>
+            <td class="p-0">
+                <table width="100%">
+                  @foreach($issueDates as $i)
+                  <tr>
+                    <td>{{ $i->issue_date }}</td>
+                    <td>{{ $i->expected_return_date
+                     }}
+                  </tr>
+                @endforeach
+                </table>
+                </td>
             <td>
             @if(!$b->actual_return_date)
             <input type="date" class="form-control form-control-user end_date" name="actual_return_date">

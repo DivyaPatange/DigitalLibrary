@@ -1,7 +1,8 @@
 @extends('auth.authLayouts.main')
 @section('title', 'Student Book Issue')
 @section('customcss')
-
+<link data-require="sweet-alert@*" data-semver="0.4.2" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
@@ -66,8 +67,8 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
+              <th>Issue Date/
+              Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
               <th>Action</th>
@@ -79,8 +80,8 @@
               <th>Sr. No.</th>
               <th>Book No.</th>
               <th>Book Name</th>
-              <th>Issue Date</th>
-              <th>Expected Return Date</th>
+              <th>Issue Date/
+              Expected Return Date</th>
               <th>Actual Return Date</th>
               <th>Book Condition</th>
               <th>Action</th>
@@ -92,18 +93,27 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $book->book_no }}</td>
-                <td>
                 <?php
                     $book_name = DB::table('library_books')->where('book_no', $book->book_no)->first();
-                    // dd($book_name);
+                    $issueDates = DB::table('student_book_issue_dates')->where('student_book_issue_id', $book->id)->get();
                 ?>
+                <td>
+                
                 @if(isset($book_name) && !empty($book_name))
                     {{ $book_name->book_name }}
                 @endif
                 </td>
-                <td>{{ $book->issue_date }}</td>
-                <td>{{ $book->expected_return_date }}</td>
-                <td>
+                <td class="p-0">
+                <table width="100%">
+                  @foreach($issueDates as $i)
+                  <tr>
+                    <td>{{ $i->issue_date }}</td>
+                    <td>{{ $i->expected_return_date
+                     }}
+                  </tr>
+                @endforeach
+                </table>
+                </td><td>
             @if(!$book->actual_return_date)
             <input type="date" class="form-control form-control-user end_date" name="actual_return_date">
             @else
@@ -162,6 +172,9 @@
                 <td>
                 <button class="btn btn-warning btn-circle update" data-id="{{ $book->id }}">
                     <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-info btn-circle @if(count($issueDates) == 4) @elseif(!$book->actual_return_date) renew  @endif"  data-id="{{ $book->id }}"  >
+                    <i class="fas fa-book"></i>
                   </button>
                 </td>
                 <td>
@@ -239,10 +252,35 @@ $(document).on('click', '.update', function(){
 			method: "POST",
 			data: {issueID:issueID, return_date:return_date, book_status:book_status},
 			success: function(data){
-        alert('Record Updated Successfully.');
+        Swal.fire(
+          'Book Returned Successfully!',
+          )
         setTimeout(() => {
             location.reload();
         }, 1000);
+			}
+		});
+		}
+});
+</script>
+<script>
+$(document).on('click', '.renew', function(){
+    var $row = $(this).closest("tr");
+    // $row.find(".nr").
+		var issueID = $row.find(".renew").data('id');
+    // alert(issueID);
+    if(issueID != ''){
+		$.ajax({
+			url: "{{ route('admin.studentBookIssue.renew') }}",
+			method: "POST",
+			data: {issueID:issueID},
+			success: function(data){
+        Swal.fire(
+          'Book Renew Successfully!',
+          )
+          setTimeout(() => {
+              location.reload();
+          }, 2000);
 			}
 		});
 		}

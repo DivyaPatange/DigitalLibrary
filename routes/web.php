@@ -63,6 +63,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::post('/bookBank/submit', 'BookBankController@submit')->name('bookBank.submit');
     Route::get('/bookBankRecord', 'BookBankController@bookBankRecord')->name('bookBankRecord');
     Route::get('/bookTransactionRecord', 'BookTransactionController@bookTransactionRecord')->name('bookTransactionRecord');
+    Route::post('/studentBookRenew', 'BookTransactionController@studentBookRenew')->name('studentBookIssue.renew');
     Route::resource('/facultyBookIssue', 'FacultyBookIssueController');
     Route::get('/facultyRecord', 'FacultyBookIssueController@facultyRecord')->name('facultyRecord');
     Route::post('/facultyBookIssue/submit', 'FacultyBookIssueController@facultyBookIssueSubmit')->name('facultyBookIssue.submit');

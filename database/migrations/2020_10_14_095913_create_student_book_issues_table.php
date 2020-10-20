@@ -18,8 +18,6 @@ class CreateStudentBookIssuesTable extends Migration
             $table->unsignedInteger('bookTransaction_id');
             $table->foreign('bookTransaction_id')->references('id')->on('book_transactions');
             $table->string('book_no');
-            $table->date('issue_date');
-            $table->date('expected_return_date');
             $table->date('actual_return_date')->nullable();
             $table->string('book_status')->nullable();
             $table->boolean('status')->default(0);

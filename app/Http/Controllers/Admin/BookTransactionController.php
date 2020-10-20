@@ -9,7 +9,9 @@ use App\Admin\StudentBT;
 use App\Admin\LibraryBook;
 use App\Admin\AcademicYear;
 use App\Admin\StudentBookIssue;
+use App\Admin\StudentBookIssueDate;
 use Redirect;
+use DB;
 
 class BookTransactionController extends Controller
 {
@@ -230,10 +232,16 @@ class BookTransactionController extends Controller
                     $issueBook = new StudentBookIssue();
                     $issueBook->bookTransaction_id = $request->BT_id;
                     $issueBook->book_no = $request->book_code;
-                    $issueBook->issue_date = $date;
-                    $issueBook->expected_return_date = $expected_date;
                     $issueBook->status = 1;
                     $issueBook->save();
+                    if($issueBook->save())
+                    {
+                        $issueDate = new StudentBookIssueDate();
+                        $issueDate->student_book_issue_id = $issueBook->id;
+                        $issueDate->issue_date = $date;
+                        $issueDate->expected_return_date = $expected_date;
+                        $issueDate->save();
+                    }
                     $bookStatus = LibraryBook::where('book_no', $request->book_code)->update(['book_status' => 0]);
                     return Redirect::back()->with('success', 'Book Issue Successfully');
                 }
@@ -251,6 +259,12 @@ class BookTransactionController extends Controller
     {
         $bookTransaction = StudentBookIssue::where('id', $request->issueID)->first();
         $book = LibraryBook::where('book_no', $bookTransaction->book_no)->first();
+        $lastIssueBookArray = StudentBookIssueDate::where('student_book_issue_id', $bookTransaction->id)->get();
+        foreach($lastIssueBookArray as $l)
+        {
+            $array[] = $l;
+        }
+        $lastIssueBook = end($array);
         $book_status = $request->book_status;
         $foundjquery = "Not found";
         if(in_array('jQuery',$book_status)){
@@ -285,23 +299,24 @@ class BookTransactionController extends Controller
             $penaltyA =0;
         }
         $date1 = $request->return_date; 
-        $date2 = $bookTransaction->expected_return_date;
+        $date2 = $lastIssueBook->expected_return_date;
          
         if($date1 > $date2)
         {
             $diff = strtotime($date2) - strtotime($date1); 
             $days = abs(round($diff / 86400));
-            $penaltyDays = 2 * $days;
+            $updatePenaltyDays = DB::table('student_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => $days]);
         }
         else{
-            $penaltyDays = 0;
+            $updatePenaltyDays = DB::table('student_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => 0]);
         }
+        $penaltyArray = StudentBookIssueDate::where('student_book_issue_id', $bookTransaction->id)->get()->sum('penalty_days');
         // Converting the array to comma separated string
         $book_status = implode(",",$book_status);
         $bookTransaction = StudentBookIssue::where('id', $request->issueID)->update([
             'actual_return_date' => $request->return_date,
             'book_status' => $book_status,
-            'penalty' => $penaltyA + $penaltyG + $penaltyPoor + $penaltyMissing + $penaltyDays,
+            'penalty' => ($penaltyA + $penaltyG + $penaltyPoor + $penaltyMissing + ($penaltyArray * 2)),
         ]);
         $studentBookReturn = StudentBookIssue::where('id', $request->issueID)->first();
         if($studentBookReturn->actual_return_date)
@@ -347,5 +362,36 @@ class BookTransactionController extends Controller
             // return output result array
             return $output;
         }
+    }
+
+
+    public function studentBookRenew(Request $request)
+    {
+        $issueBook = StudentBookIssue::where('id', $request->issueID)->first();
+        $lastIssueBookArray = StudentBookIssueDate::where('student_book_issue_id', $issueBook->id)->get();
+        foreach($lastIssueBookArray as $l)
+        {
+            $array[] = $l;
+        }
+        $lastIssueBook = end($array);
+        $date = date('2020/11/11 5:45:00');
+        $increment_date = strtotime("+7 day", strtotime($date));  
+        $expected_date = date("Y-m-d", $increment_date);
+        $renewBook = new StudentBookIssueDate();
+        $renewBook->student_book_issue_id = $issueBook->id;
+        $renewBook->issue_date = $date;
+        $renewBook->expected_return_date = $expected_date;
+        $convertDate = strtotime($date);
+        $convertedDate = date("Y-m-d", $convertDate);
+        if($convertedDate > $lastIssueBook->expected_return_date)
+        {
+            $diff = strtotime($convertedDate) - strtotime($lastIssueBook->expected_return_date); 
+            $days = abs(round($diff / 86400));
+            $book = DB::table('student_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => $days]);
+        }
+        else{
+            $book = DB::table('student_book_issue_dates')->where('id', $lastIssueBook->id)->update(['penalty_days' => 0]); 
+        }
+        $renewBook->save();
     }
 }

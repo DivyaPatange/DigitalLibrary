@@ -203,17 +203,7 @@
 <!-- /.container-fluid -->
 @endsection
 @section('customjs')
-<!-- Page level plugins -->
-<script src="{{ asset('adminAsset/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-<!-- Page level custom scripts -->
-<script src="{{ asset('adminAsset/js/demo/datatables-demo.js') }}"></script>
-<script>
-$(document).ready(function() {
-        $('#dataTable').DataTable();
-    } );
-</script>
 <script type="text/javascript">
 function loadContent() {
   var query = document.getElementById("academic_year").value;
@@ -252,11 +242,24 @@ window.onload = loadContent;
             // if search is succcessfully done, this callback function is called
             success:function (data) {
                 // print the search results in the div called country_list(id)
-                $('#student_bt').html(data);
+                $('#student_bt').append(data);
             }
         })
 
     });
   });
   </script>
+<!-- Page level plugins -->
+<script src="{{ asset('adminAsset/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ asset('adminAsset/js/demo/datatables-demo.js') }}"></script>
+<script>
+$(document).ready(function() {
+        $('#dataTable').DataTable();
+    } );
+</script>
+
+
 @endsection

@@ -9,6 +9,7 @@ use App\Admin\Course;
 use App\Admin\Department;
 use App\Admin\AcademicYear;
 use DB;
+use DataTables;
 
 class StudentBTCardController extends Controller
 {
@@ -152,7 +153,7 @@ class StudentBTCardController extends Controller
                     $course = DB::table('courses')->where('id', $row->class)->first();
                     $department = DB::table('departments')->where('id', $row->department)->first();
                     $session = DB::table('academic_years')->where('id', $row->session)->first();
-                       $output .= '<tr>'. 
+                       $output .= '<tr role="row" class="item'.++$key.'">'. 
                        '<td>'.++$key.'</td>'.
                        '<td>'.$row->BT_no.'</td>'. 
                        '<td>'.$row->name.'</td>'.
