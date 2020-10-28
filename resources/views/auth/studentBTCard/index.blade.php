@@ -1,8 +1,10 @@
 @extends('auth.authLayouts.main')
 @section('title', 'Student BT Card')
 @section('customcss')
-
-<link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link  href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<!-- <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> -->
 @endsection
 @section('content')
 <!-- Begin Page Content -->
@@ -157,43 +159,7 @@
             </tr>
           </tfoot>
           <tbody id="student_bt">
-          @foreach($studentBT as $key => $s)
-            <tr>
-              <td>{{ ++$key }}</td>
-              <td>{{ $s->BT_no }}</td>
-              <td>{{ $s->name }}</td>
-              <td>
-              <?php
-                $course = DB::table('courses')->where('id', $s->class)->first();
-              ?>
-              @if(isset($course) && !empty($course)){{ $course->course_name }}@endif</td>
-              <td>
-              <?php
-                $department = DB::table('departments')->where('id', $s->department)->first();
-              ?>
-              @if(isset($department) && !empty($department)) {{ $department->department }} @endif</td>
-              <td>
-              <?php
-                 $session = DB::table('academic_years')->where('id', $s->session)->first();
-              ?>
-              @if(isset($session) && !empty($session))
-              ({{ $session->from_academic_year }}) - ({{ $session->to_academic_year }})
-              @endif
-              </td>
-              <td>
-                <a href="{{ route('admin.student-bt-card.edit', $s->id) }}" class="btn btn-warning btn-circle">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()" class="btn btn-danger btn-circle">
-                  <i class="fas fa-trash"></i>
-                </a>
-                <form action="{{ route('admin.student-bt-card.destroy', $s->id) }}" method="post">
-                  @method('DELETE')
-                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                </form>
-              </td>
-            </tr>
-          @endforeach
+         
           </tbody>
         </table>
       </div>
@@ -203,41 +169,54 @@
 <!-- /.container-fluid -->
 @endsection
 @section('customjs')
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link  href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
 <script>
-  $(document).ready(function () {
-    // keyup function looks at the keys typed on the search box
-    $('#academic_year').on('change',function() {
-        // the text typed in the input field is assigned to a variable 
-        var query = $(this).val();
+$('#dataTable').DataTable({
+processing: true,
+serverSide: true,
+ajax: "{{ route('admin.student-bt-card.index') }}",
+columns: [
+{ data: 'id', name: 'id' },
+{ data: 'BT_no', name: 'BT_no' },
+{ data: 'name', name: 'name' },
+{ data: 'class', name: 'class' },
+{ data: 'department', name: 'department' },
+{ data: 'session', name: 'session' },
+{data: 'action', name: 'action', orderable: false},
+],
+order: [[0, 'desc']]
+});
+  // $(document).ready(function () {
+  //   // keyup function looks at the keys typed on the search box
+  //   $('#academic_year').on('change',function() {
+  //       // the text typed in the input field is assigned to a variable 
+  //       var query = $(this).val();
         
-        $.ajax({
-            // assign a controller function to perform search action - route name is search
-            url:"{{ route('admin.studentBTRecord') }}",
-            // since we are getting data methos is assigned as GET
-            type:"GET",
-            // data are sent the server
-            data:{'academic_year':query},
-            // if search is succcessfully done, this callback function is called
-            success:function (data) {
-                // print the search results in the div called country_list(id)
-                $('#student_bt').append(data);
-            }
-        })
+  //       $.ajax({
+  //           // assign a controller function to perform search action - route name is search
+  //           url:"{{ route('admin.studentBTRecord') }}",
+  //           // since we are getting data methos is assigned as GET
+  //           type:"GET",
+  //           // data are sent the server
+  //           data:{'academic_year':query},
+  //           // if search is succcessfully done, this callback function is called
+  //           success:function (data) {
+  //               // print the search results in the div called country_list(id)
+  //               $('#student_bt').append(data);
+  //           }
+  //       })
 
-    });
-  });
+  //   });
+  // });
   </script>
-<!-- Page level plugins -->
-<script src="{{ asset('adminAsset/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-<!-- Page level custom scripts -->
-<script src="{{ asset('adminAsset/js/demo/datatables-demo.js') }}"></script>
 <script>
-$(document).ready(function() {
-        $('#dataTable').DataTable();
-    } );
+// $(document).ready(function() {
+//         $('#dataTable').DataTable();
+//     } );
 </script>
 
 

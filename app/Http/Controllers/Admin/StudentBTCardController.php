@@ -9,7 +9,7 @@ use App\Admin\Course;
 use App\Admin\Department;
 use App\Admin\AcademicYear;
 use DB;
-use DataTables;
+use Datatables;
 
 class StudentBTCardController extends Controller
 {
@@ -31,6 +31,13 @@ class StudentBTCardController extends Controller
                 $current_session = $a->id;
             }
         }
+        if(request()->ajax()) {
+            return datatables()->of(StudentBT::select('*'))
+            ->addColumn('action', 'action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+            }
         $studentBT = StudentBT::where('session', $current_session)->get();
         // dd($studentBT);
         return view('auth.studentBTCard.index', compact('studentBT', 'course', 'department', 'academicYear'));

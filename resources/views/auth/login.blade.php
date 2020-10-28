@@ -24,7 +24,7 @@
 <body class="bg-gradient-primary">
 
   <div class="container">
-
+  <?php  print_r(PHP_INT_SIZE); ?>
     <!-- Outer Row -->
     <div class="row justify-content-center">
 
