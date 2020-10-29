@@ -2,9 +2,9 @@
 @section('title', 'Student BT Card')
 @section('customcss')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link  href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-<!-- <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> -->
+<!-- <link  href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"> -->
+<!-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> -->
+<link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
 <!-- Begin Page Content -->
@@ -169,10 +169,15 @@
 <!-- /.container-fluid -->
 @endsection
 @section('customjs')
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link  href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> -->
+<!-- Page level plugins -->
+<script src="{{ asset('adminAsset/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
+<!-- Page level custom scripts -->
+<script src="{{ asset('adminAsset/js/demo/datatables-demo.js') }}"></script>
 <script>
 $('#dataTable').DataTable({
 processing: true,
@@ -187,30 +192,38 @@ columns: [
 { data: 'session', name: 'session' },
 {data: 'action', name: 'action', orderable: false},
 ],
-order: [[0, 'desc']]
+order: [[0, 'asc']],
 });
-  // $(document).ready(function () {
-  //   // keyup function looks at the keys typed on the search box
-  //   $('#academic_year').on('change',function() {
-  //       // the text typed in the input field is assigned to a variable 
-  //       var query = $(this).val();
-        
-  //       $.ajax({
-  //           // assign a controller function to perform search action - route name is search
-  //           url:"{{ route('admin.studentBTRecord') }}",
-  //           // since we are getting data methos is assigned as GET
-  //           type:"GET",
-  //           // data are sent the server
-  //           data:{'academic_year':query},
-  //           // if search is succcessfully done, this callback function is called
-  //           success:function (data) {
-  //               // print the search results in the div called country_list(id)
-  //               $('#student_bt').append(data);
-  //           }
-  //       })
-
-  //   });
-  // });
+  $(document).ready(function () {
+    // keyup function looks at the keys typed on the search box
+    $('#academic_year').on('change',function() {
+        // the text typed in the input field is assigned to a variable 
+        var query = $(this).val();
+        $('#dataTable').DataTable({
+processing: true,
+serverSide: true,
+        ajax:({
+            // assign a controller function to perform search action - route name is search
+            url:"{{ route('admin.studentBTRecord') }}",
+            // since we are getting data methos is assigned as GET
+            type:"GET",
+            // data are sent the server
+            data:{'academic_year':query},
+            // if search is succcessfully done, this callback function is called
+            columns: [
+{ data: 'id', name: 'id' },
+{ data: 'BT_no', name: 'BT_no' },
+{ data: 'name', name: 'name' },
+{ data: 'class', name: 'class' },
+{ data: 'department', name: 'department' },
+{ data: 'session', name: 'session' },
+{data: 'action', name: 'action', orderable: false},
+],
+order: [[0, 'asc']],
+        })
+    });
+    });
+  });
   </script>
 
 <script>

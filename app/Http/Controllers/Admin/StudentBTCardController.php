@@ -32,15 +32,25 @@ class StudentBTCardController extends Controller
             }
         }
         if(request()->ajax()) {
-            return datatables()->of(StudentBT::select('*'))
-            ->addColumn('action', 'action')
-            ->rawColumns(['action'])
+            $studentBT = StudentBT::where('session', $current_session)->get();
+            return datatables()->of(StudentBT::all())
+            ->addColumn('class', function($row){
+                return $row->course->course_name;
+            })
+            ->addColumn('department', function(StudentBT $studentBT){
+                return $studentBT->departments->department;
+            })
+            ->addColumn('session', function(StudentBT $studentBT){
+                return $studentBT->sessions->from_academic_year.' - '.$studentBT->sessions->to_academic_year;
+            })
+            ->addColumn('action', 'auth.studentBTCard.action')
+            ->rawColumns(['class', 'department', 'session', 'action'])
             ->addIndexColumn()
             ->make(true);
             }
-        $studentBT = StudentBT::where('session', $current_session)->get();
+        
         // dd($studentBT);
-        return view('auth.studentBTCard.index', compact('studentBT', 'course', 'department', 'academicYear'));
+        return view('auth.studentBTCard.index', compact( 'course', 'department', 'academicYear'));
     }
 
     /**

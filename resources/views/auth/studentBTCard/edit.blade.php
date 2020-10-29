@@ -47,7 +47,12 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label>Class</label>
-                                    <input type="text" class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName" placeholder="Enter Class" value="{{ $studentBT->class }}">
+                                    <select class="form-control form-control-user @error('class') is-invalid @enderror" name="class" id="exampleInputName">
+                                        <option value="">- Select Class -</option>
+                                        @foreach($course as $c)
+                                        <option value="{{ $c->id }} " {{ ($c->id == $studentBT->class) ? 'selected=selected' : '' }}>{{ $c->course_name }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('course')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
