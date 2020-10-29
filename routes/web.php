@@ -48,13 +48,11 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::get('/studentBTCard', 'BookTransactionController@searchStudentBTCard')->name('searchStudentBTCard');
     Route::get('/searchBookCode', 'BookTransactionController@searchBookCode')->name('searchBookCode');
     Route::resource('/libraryAccession', 'LibraryAccessionController');
-    Route::get('/searchLibraryAccessionRecord', 'LibraryAccessionController@searchLibraryAccessionRecord')->name('searchLibraryAccessionRecord');
     Route::post('/updateLibraryAccessionTime', 'LibraryAccessionController@updateLibraryAccessionTime')->name('libraryAccession.updatetime');
     Route::get('/studentBookIssueForm/{id}', 'BookTransactionController@studentBookIssueForm')->name('studentBookIssueForm');
     Route::post('/studentBookIssueForm/submit', 'BookTransactionController@studentBookIssueFormSubmit')->name('studentBookIssueForm.submit');
     Route::post('/studentBookIssueForm/update', 'BookTransactionController@studentBookIssueFormUpdate')->name('studentBookIssue.update');
     Route::resource('/computerAccession', 'ComputerAccessionController');
-    Route::get('/searchComputerAccessionRecord', 'ComputerAccessionController@searchComputerAccessionRecord')->name('searchComputerAccessionRecord');
     Route::post('/updateComputerAccessionTime', 'ComputerAccessionController@updateComputerAccessionTime')->name('computerAccession.updatetime');
     Route::resource('/departmentLibrary', 'DepartmentLibraryController');
     Route::get('/departmentBooks/{id}', 'DepartmentLibraryController@viewDepartmentBook')->name('viewDepartmentBook');
@@ -62,10 +60,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admi
     Route::resource('/bookBank', 'BookBankController');
     Route::post('/bookBank/submit', 'BookBankController@submit')->name('bookBank.submit');
     Route::get('/bookBankRecord', 'BookBankController@bookBankRecord')->name('bookBankRecord');
-    Route::get('/bookTransactionRecord', 'BookTransactionController@bookTransactionRecord')->name('bookTransactionRecord');
     Route::post('/studentBookRenew', 'BookTransactionController@studentBookRenew')->name('studentBookIssue.renew');
     Route::resource('/facultyBookIssue', 'FacultyBookIssueController');
-    Route::get('/facultyRecord', 'FacultyBookIssueController@facultyRecord')->name('facultyRecord');
     Route::post('/facultyBookIssue/submit', 'FacultyBookIssueController@facultyBookIssueSubmit')->name('facultyBookIssue.submit');
     Route::post('/facultyBookRenew', 'FacultyBookIssueController@facultyBookRenew')->name('facultyBookIssue.renew');
 });

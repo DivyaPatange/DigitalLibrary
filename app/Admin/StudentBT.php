@@ -20,4 +20,8 @@ class StudentBT extends Model
     public function sessions(){
         return $this->belongsTo('App\Admin\AcademicYear','session', 'id');
     }
+
+    public function book_transaction(){
+        return $this->hasMany('App\Admin\BookTransaction','BT_no', 'id');
+    }
 }
