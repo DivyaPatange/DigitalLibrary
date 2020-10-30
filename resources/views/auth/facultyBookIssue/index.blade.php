@@ -110,11 +110,4 @@ $(document).ready(function(){
   
 });
 </script>
-<script>
-$("#book_bank").on("click",".issueBook",function(){
-      let deleteButton = $(this);
-      let id = deleteButton.data('id');
-      window.location.href="/admin/facultyBookIssue/"+id;
-});
-</script>
 @endsection

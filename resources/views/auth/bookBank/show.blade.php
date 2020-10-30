@@ -1,7 +1,8 @@
 @extends('auth.authLayouts.main')
 @section('title', 'Student Book Issue')
 @section('customcss')
-
+<link data-require="sweet-alert@*" data-semver="0.4.2" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link href="{{ asset('adminAsset/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
@@ -20,7 +21,7 @@
   </div>
   @endif
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Book Bank Book Issue</h1>
+  <h1 class="h3 mb-2 text-gray-800">Book Issue</h1>
   <div class="row justify-content-center">
     <div class="col-lg-6">
       <!-- Basic Card Example -->
@@ -239,7 +240,9 @@ $(document).on('click', '.update', function(){
 			method: "POST",
 			data: {issueID:issueID, return_date:return_date, book_status:book_status},
 			success: function(data){
-        alert('Record Updated Successfully.');
+        Swal.fire(
+          'Book Returned Successfully!',
+          )
         setTimeout(() => {
             location.reload();
         }, 1000);

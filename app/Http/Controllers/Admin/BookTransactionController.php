@@ -396,7 +396,7 @@ class BookTransactionController extends Controller
             $array[] = $l;
         }
         $lastIssueBook = end($array);
-        $date = date('2020/11/11 5:45:00');
+        $date = date('Y/m/d H:i:s');
         $increment_date = strtotime("+7 day", strtotime($date));  
         $expected_date = date("Y-m-d", $increment_date);
         $renewBook = new StudentBookIssueDate();
